@@ -6,6 +6,7 @@ module.exports = {
   extends: ['plugin:react/recommended'],
   parserOptions: {
     requireConfigFile: false,
+    allowImportExportEverywhere: true,
     babelOptions: {
       presets: ['@babel/preset-react'],
     },
