@@ -1,27 +1,33 @@
 module.exports = {
   env: {
-    es2021: true,
+    es2020: true
   },
-  parser: '@babel/eslint-parser',
-  extends: ['plugin:react/recommended'],
+  extends: [
+    'plugin:react/recommended',
+    'standard',
+    'eslint:recommended'
+  ],
   parserOptions: {
-    requireConfigFile: false,
-    allowImportExportEverywhere: true,
-    babelOptions: {
-      presets: ['@babel/preset-react'],
-    },
     ecmaFeatures: {
-      jsx: true,
+      jsx: true
     },
     ecmaVersion: 12,
-    sourceType: 'module',
+    sourceType: 'module'
   },
-  plugins: ['react'],
+  plugins: [
+    'react'
+  ],
   rules: {
     semi: 0,
     'react/jsx-uses-react': 'error',
     'react/jsx-uses-vars': 'error',
     'react/prop-types': 0,
+    'no-unused-vars': 'off'
 
   },
-};
+  settings: {
+    react: {
+      version: 'detect'
+    }
+  }
+}
