@@ -7,8 +7,13 @@ import Signup from './pages/Signup'
 import Login from './pages/Login'
 import Forgot from './pages/Forgot'
 import Home from './pages/Home'
+import Search from './pages/Search'
+import FlightDetail from './pages/FlightDetail'
+import MyBooking from './pages/MyBooking'
+import BookingDetail from './pages/BookingDetail'
 
 import Header from './components/Header'
+import Footer from './components/Footer'
 class App extends React.Component {
   render () {
     return (
@@ -16,17 +21,15 @@ class App extends React.Component {
       <Header />
       <Switch>
         <Route path="/" exact component={Home}/>
-        <Route path="/login" exact component={Login}/>
-        <Route path="/forgot" exact component={Forgot}/>
-        <Route path="/signup" exact component={Signup}/>
-
-        {/* <Route path="/login" component={Login}/>
-        <Route path="/signup" component={SignUp}/>
-        <Route path="/forgot" component={ForgotP}/>
-        <Route path="/product" exact component={Product}/>
-        <Route path="/product/:id" component={Product}/>
-        <Route path="/productdetail/:id" component={Detail}/> */}
+        <Route path="/login" component={Login}/>
+        <Route path="/forgot" component={Forgot}/>
+        <Route path="/signup" component={Signup}/>
+        <Route path="/search" component={Search}/>
+        <Route path="/detail" component={FlightDetail}/>
+        <Route path="/mybooking" component={MyBooking}/>
+        <Route path="/bookingdetail" component={BookingDetail}/>
       </Switch>
+      <Footer />
       </BrowserRouter>
     )
   }

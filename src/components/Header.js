@@ -2,7 +2,7 @@ import React from 'react'
 import { Container, Navbar, Nav, NavDropdown, Image, Form, Button, FormControl } from 'react-bootstrap';
 import icon from '../assets/icon.png';
 import { FaSearchLocation } from 'react-icons/all';
-import { useLocation } from 'react-router-dom'
+import { useLocation, Link } from 'react-router-dom'
 
 export default function Header (props) {
   const location = useLocation();
@@ -14,12 +14,12 @@ export default function Header (props) {
         ? (
         <Navbar collapseOnSelect expand="lg" bg="white" style={styleCoba.parentAll} variant="light">
         <Container>
-        <Navbar.Brand style={styleCoba.parentIcon} href="#"><Image className="pe-3" src={icon} />Ticky</Navbar.Brand>
+        <Link style={styleCoba.parentIcon} to="/login"><Image className="pe-3" src={icon}/>Ticky</Link>
 
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Form className="position-relative d-flex justify-content-between align-items-center d-md-flex justify-content-md-between align-items-md-center ms-auto  mt-3 mt-md-0 pe-md-4">
-            <Button variant="outline-success" style={styleCoba.searchIcon}><FaSearchLocation /> </Button>
+            <Link to="/search" style={styleCoba.searchIcon}><FaSearchLocation /> </Link>
               <FormControl
                 type="search"
                 placeholder="Where you want to go?"
@@ -30,7 +30,7 @@ export default function Header (props) {
           </Form>
           <Nav className="me-auto ">
             <Nav.Link style={styleCoba.textMenu} className="pe-md-4  mt-3 mt-md-0" href="#features">Find Ticket</Nav.Link>
-            <Nav.Link style={styleCoba.textMenu} className="pe-md-4  mt-3 mt-md-0" href="#pricing">My Booking</Nav.Link>
+            <Nav.Link style={styleCoba.textMenu} className="pe-md-4  mt-3 mt-md-0" href="mybooking">My Booking</Nav.Link>
 
           </Nav>
           <Nav>
@@ -56,7 +56,8 @@ const styleCoba = {
   },
   parentIcon: {
     color: '#414141',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    textDecoration: 'none'
   },
   searchIcon: {
     margin: '0',
@@ -65,8 +66,8 @@ const styleCoba = {
     position: 'absolute',
     boxShadow: 'none',
     left: '0',
-    color: '#414141'
-
+    color: '#414141',
+    padding: '0px 10px'
   },
   searchInput: {
     padding: '10px 40px',
@@ -84,6 +85,7 @@ const styleCoba = {
     color: 'white',
     borderRadius: '10px',
     padding: '10px 40px',
-    fontWeight: '600'
+    fontWeight: '600',
+    boxShadow: '0 4px 8px 0 rgba(126, 207, 192, 0.5)'
   }
 }
