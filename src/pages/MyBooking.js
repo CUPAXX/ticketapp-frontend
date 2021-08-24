@@ -21,10 +21,10 @@ export default class MyBooking extends Component {
             </div>
             <Image src={cardAtm} />
             <div className="d-flex flex-column align-self-start gap-4">
-              <div className="d-flex flex-row align-items-center gap-4">
+              <Link to="/profile" style={{ textDecoration: 'none' }} className="d-flex flex-row align-items-center gap-4">
                 <FaUserCircle size={20} color="#7ECFC0" />
                 <p className="fw-bold" style={{ color: '#7ECFC0' }}>Profile</p>
-              </div>
+              </Link>
               <div className="d-flex flex-row align-items-center gap-4">
                 <BsStarFill size={20} />
                 <p className="fw-bold">My Review</p>

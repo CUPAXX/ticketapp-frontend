@@ -11,6 +11,10 @@ import Search from './pages/Search'
 import FlightDetail from './pages/FlightDetail'
 import MyBooking from './pages/MyBooking'
 import BookingDetail from './pages/BookingDetail'
+import Profile from './pages/Profile'
+import Chat from './pages/Chat'
+import ChatRoom from './pages/ChatRoom'
+import Notification from './pages/Notification'
 
 import Header from './components/Header'
 import Footer from './components/Footer'
@@ -28,6 +32,10 @@ class App extends React.Component {
         <Route path="/detail" component={FlightDetail}/>
         <Route path="/mybooking" component={MyBooking}/>
         <Route path="/bookingdetail" component={BookingDetail}/>
+        <Route path="/profile" component={Profile}/>
+        <Route path="/chat" component={Chat}/>
+        <Route path="/chatroom" component={ChatRoom}/>
+        <Route path="/notification" component={Notification}/>
       </Switch>
       <Footer />
       </BrowserRouter>
