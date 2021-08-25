@@ -16,7 +16,7 @@ function Header (props) {
         ? (
         <Navbar collapseOnSelect expand="lg" bg="white" style={styleCoba.parentAll} variant="light">
         <Container>
-        <Link style={styleCoba.parentIcon} to="/login"><Image className="pe-3" src={icon}/>Ticky</Link>
+        <Link style={styleCoba.parentIcon} to="/"><Image className="pe-3" src={icon}/>Ticky</Link>
 
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
