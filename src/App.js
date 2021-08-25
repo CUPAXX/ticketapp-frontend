@@ -34,7 +34,7 @@ class App extends React.Component {
         <Route path="/bookingdetail" component={BookingDetail}/>
         <Route path="/profile" component={Profile}/>
         <Route path="/chat" component={Chat}/>
-        <Route path="/chatroom" component={ChatRoom}/>
+        <Route path="/chatroom/:id" component={ChatRoom}/>
         <Route path="/notification" component={Notification}/>
       </Switch>
       <Footer />

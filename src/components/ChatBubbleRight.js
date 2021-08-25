@@ -5,7 +5,7 @@ import airline from '../assets/airlineIcon.png'
 import qr from '../assets/qr.png'
 import imgChat from '../assets/imgChat.png'
 
-export default function ChatBubbleRight () {
+export default function ChatBubbleRight ({ fullname, message }) {
   return (
     <div className="d-flex flex-column m-2">
       <div className="d-flex flex-row justify-content-between align-items-center border-1 border-bottom p-2">
@@ -15,8 +15,8 @@ export default function ChatBubbleRight () {
         </div>
         <div className="d-flex flex-row align-items-center gap-3">
           <div className="d-flex flex-column">
-            <h6>Soham Henry</h6>
-            <p>Me: Bro, just fuck off</p>
+            <h6></h6>
+            <p>{message}</p>
           </div>
           <Image src={imgChat} />
         </div>

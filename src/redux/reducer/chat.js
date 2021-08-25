@@ -1,8 +1,6 @@
 const initialState = {
-  user: [],
-  data: [],
-  allData: [],
-  userData: [],
+  ListChat: [],
+  RoomChat: [],
   sccMsg: '',
   errMsg: ''
 }
@@ -12,20 +10,20 @@ const chat = (state = initialState, action) => {
     case 'CHAT_LIST': {
       return {
         ...state,
-        user: action.payload
+        ListChat: action.payload
       }
     }
-    case 'CHAT_LIST_ALL': {
+    case 'CHAT_ROOM': {
       return {
         ...state,
-        allData: action.payload
+        RoomChat: action.payload
       }
     }
     case 'SEND_CHAT': {
       return {
-        ...state,
-        sccMsg: action.payload,
-        errMsg: ''
+        ...state
+        // sccMsg: action.payload,
+        // errMsg: ''
       }
     }
     case 'SEND_CHAT_FAILED': {
@@ -35,14 +33,14 @@ const chat = (state = initialState, action) => {
         sccMsg: ''
       }
     }
-    case 'CHAT_RESET': {
-      return {
-        ...state,
-        sccMsg: '',
-        errMsg: '',
-        userData: []
-      }
-    }
+    // case 'CHAT_RESET': {
+    //   return {
+    //     ...state,
+    //     sccMsg: '',
+    //     errMsg: '',
+    //     userData: []
+    //   }
+    // }
     case 'DELETE_CHAT': {
       return {
         ...state,
