@@ -27,6 +27,20 @@ const auth = (state = initialState, action) => {
         succMsg: ''
       }
     }
+    case 'UPDATE_USER': {
+      return {
+        ...state,
+        succMsg: action.payload,
+        errMsg: ''
+      }
+    }
+    case 'UPDATE_USER_FAILED': {
+      return {
+        ...state,
+        errMsg: action.payload,
+        succMsg: ''
+      }
+    }
     default: {
       return {
         ...state
