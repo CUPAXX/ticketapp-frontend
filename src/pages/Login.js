@@ -4,11 +4,51 @@ import { LeftBg } from '../components/LeftBg'
 import icon from '../assets/icon.png';
 import { Link } from 'react-router-dom'
 import { FcGoogle, FaFacebook } from 'react-icons/all';
+import { connect } from 'react-redux';
+import { authLogin } from '../redux/action/auth'
+import Swal from 'sweetalert2'
 
-export default class Login extends Component {
+class Login extends Component {
+  state = {
+    email: '',
+    password: ''
+  }
+
+  onLogin = async (e) => {
+    e.preventDefault()
+    const { email, password } = this.state
+    await this.props.authLogin(email, password).then(() => {
+      if (this.props.auth.errMsg === '') {
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: 'Login Success',
+          showConfirmButton: false,
+          timer: 1500
+        })
+      } else {
+        Swal.fire({
+          position: 'top-end',
+          icon: 'error',
+          title: 'Worng username Or password',
+          showConfirmButton: false,
+          timer: 1500
+        })
+      }
+    })
+  }
+
+  componentDidUpdate () {
+    const { token } = this.props.auth;
+    if (token !== null) {
+      this.props.history.push('/');
+    }
+  }
+
   render () {
+    console.log(this.state)
     return (
-      <Row className="g-0">
+    <Row className="g-0">
         <LeftBg />
         <Col >
           <div className="columnRight" style={styleCoba.columnRight}>
@@ -20,17 +60,17 @@ export default class Login extends Component {
               <h1 style={styleCoba.textIcon}>Ticky</h1>
             </Col>
           </Row>
-          <h1 style={styleCoba.label}>Login</h1>
+          <h1 className="mt-5 mb-2" style={styleCoba.label}>Login</h1>
 
-          <Form>
+          <Form onSubmit={this.onLogin}>
 
-          <Form.Group className="mb-3" controlId="fullname">
-              <Form.Control style={styleCoba.form} type="text" placeholder="Full Name" />
+          <Form.Group className="mb-3" controlId="email">
+              <Form.Control onChange={e => this.setState({ email: e.target.value })} style={styleCoba.form} type="email" placeholder="Email" />
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="password">
               <div className="position-relative d-flex justify-content-between align-items-center d-md-flex justify-content-md-between align-items-md-center">
-                <Form.Control style={styleCoba.form} type="password" placeholder="Password" />
+                <Form.Control onChange={e => this.setState({ password: e.target.value })} style={styleCoba.form} type="password" placeholder="Password" />
                 <Button style={styleCoba.iconBtn}><i className="fa fa-eye" style={styleCoba.iconPw} /></Button>
               </div>
             </Form.Group>
@@ -55,6 +95,14 @@ export default class Login extends Component {
     )
   }
 }
+
+const mapStateToProps = state => ({
+  auth: state.auth
+})
+
+const mapDispatchToProps = { authLogin }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login)
 
 const styleCoba = {
 

@@ -4,12 +4,46 @@ import {
 } from 'react-bootstrap'
 import { LeftBg } from '../components/LeftBg'
 import icon from '../assets/icon.png'
+import { connect } from 'react-redux';
+import Swal from 'sweetalert2'
+import { authRegister } from '../redux/action/auth'
+import { Link } from 'react-router-dom';
 
 class Signup extends Component {
+  state = {
+    email: '',
+    password: '',
+    fullname: ''
+  }
+
+  onRegister = (e) => {
+    e.preventDefault()
+    const { email, password, fullname } = this.state
+    this.props.authRegister(email, password, fullname).then(() => {
+      if (this.props.auth.errMsg === '') {
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: 'Register Success',
+          showConfirmButton: false,
+          timer: 1500
+        })
+        this.props.history.push('/login');
+      } else {
+        Swal.fire({
+          position: 'top-end',
+          icon: 'error',
+          title: `${this.props.auth.errMsg}`,
+          showConfirmButton: false,
+          timer: 1500
+        })
+      }
+    })
+  }
+
   render () {
     return (
-
-      <Row class="g-0">
+      <Row className="g-0">
         <LeftBg />
         <Col>
           <div className="columnRight" style={styleCoba.columnRight}>
@@ -21,21 +55,20 @@ class Signup extends Component {
                 <h1 style={styleCoba.textIcon}>Ticky</h1>
               </Col>
             </Row>
-            <h1 style={styleCoba.label}>Register</h1>
+            <h1 style={styleCoba.label} className="mt-5">Register</h1>
 
-            <Form>
-
+            <Form onSubmit={this.onRegister}>
               <Form.Group className="mb-3" controlId="fullname">
-                <Form.Control style={styleCoba.form} type="text" placeholder="Full Name" />
+                <Form.Control onChange={e => this.setState({ fullname: e.target.value })} style={styleCoba.form} type="text" placeholder="Full Name" />
               </Form.Group>
 
               <Form.Group className="mb-3" controlId="email">
-                <Form.Control style={styleCoba.form} type="email" placeholder="Enter email" />
+                <Form.Control onChange={e => this.setState({ email: e.target.value })} style={styleCoba.form} type="email" placeholder="Enter email" />
               </Form.Group>
 
               <Form.Group className="mb-3" controlId="password">
                 <div className="position-relative d-flex justify-content-between align-items-center d-md-flex justify-content-md-between align-items-md-center">
-                  <Form.Control style={styleCoba.form} type="password" placeholder="Password" />
+                  <Form.Control onChange={e => this.setState({ password: e.target.value })} style={styleCoba.form} type="password" placeholder="Password" />
                   <Button style={styleCoba.iconBtn}><i className="fa fa-eye" style={styleCoba.iconPw} /></Button>
                 </div>
               </Form.Group>
@@ -53,7 +86,7 @@ class Signup extends Component {
             </Form>
 
             <div style={styleCoba.btnParen}>
-              <Button style={styleCoba.btnSignIn} variant="primary" type="button">Sign In</Button>
+              <Link to="/login" style={styleCoba.btnSignIn} variant="primary" type="button">Sign In</Link>
             </div>
           </div>
 
@@ -64,7 +97,12 @@ class Signup extends Component {
   }
 }
 
-export default Signup
+const mapStateToProps = state => ({
+  auth: state.auth
+})
+const mapDispatchToProps = { authRegister }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Signup)
 
 const styleCoba = {
 
@@ -137,6 +175,8 @@ const styleCoba = {
     borderRadius: '10px',
     boxShadow: '0 4px 8px 0 rgba(126, 207, 192, 0.5)',
     marginTop: '25px',
-    color: '#7ECFC0'
+    color: '#7ECFC0',
+    textAlign: 'center',
+    textDecoration: 'none'
   }
 }

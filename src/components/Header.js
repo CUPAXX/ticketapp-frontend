@@ -1,10 +1,12 @@
 import React from 'react'
 import { Container, Navbar, Nav, NavDropdown, Image, Form, Button, FormControl } from 'react-bootstrap';
 import icon from '../assets/icon.png';
-import { FaSearchLocation } from 'react-icons/all';
+import { AiOutlineMail, BsBell, FaSearchLocation } from 'react-icons/all';
 import { useLocation, Link } from 'react-router-dom'
+import headerImg from '../assets/headerImg.png'
+import { connect } from 'react-redux';
 
-export default function Header (props) {
+function Header (props) {
   const location = useLocation();
   console.log(location.pathname);
   return (
@@ -33,10 +35,29 @@ export default function Header (props) {
             <Nav.Link style={styleCoba.textMenu} className="pe-md-4  mt-3 mt-md-0" href="mybooking">My Booking</Nav.Link>
 
           </Nav>
-          <Nav>
-            <Nav.Link style={styleCoba.btnRight} className=" mt-3 mt-md-0" href="#deets">Sign Up</Nav.Link>
+          {props.auth.token === null
+            ? (
+            <Nav>
+              <Nav.Link style={styleCoba.btnRight} className=" mt-3 mt-md-0" as={Link} to="/signup">Sign Up</Nav.Link>
 
           </Nav>
+              )
+            : (
+              <Nav className="d-flex flex-row align-items-center gap-5">
+                <Link to="/profile">
+                  <AiOutlineMail style={{ color: 'gray' }} size={24} />
+                </Link>
+
+                <Link to="/notification">
+                  <BsBell style={{ color: 'gray' }} size={24} />
+                </Link>
+
+                <Link to="/profile">
+                  <Image style={{ width: '50px', height: '50px' }} src={headerImg} />
+                </Link>
+              </Nav>
+              )}
+
         </Navbar.Collapse>
         </Container>
       </Navbar>
@@ -49,6 +70,14 @@ export default function Header (props) {
 
   )
 }
+
+const mapStateToProps = state => ({
+  auth: state.auth
+})
+
+const mapDispatchToProps = { }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header)
 
 const styleCoba = {
   parentAll: {

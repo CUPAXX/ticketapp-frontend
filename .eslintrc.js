@@ -2,12 +2,17 @@ module.exports = {
   env: {
     es2020: true
   },
+  parser: '@babel/eslint-parser',
   extends: [
     'plugin:react/recommended',
     'standard',
     'eslint:recommended'
   ],
   parserOptions: {
+    requireConfigFile: false,
+    babelOptions: {
+      presets: ['@babel/preset-react']
+    },
     ecmaFeatures: {
       jsx: true
     },
