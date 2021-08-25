@@ -44,7 +44,7 @@ function Header (props) {
               )
             : (
               <Nav className="d-flex flex-row align-items-center gap-5">
-                <Link to="/profile">
+                <Link to="/chat">
                   <AiOutlineMail style={{ color: 'gray' }} size={24} />
                 </Link>
 
