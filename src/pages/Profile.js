@@ -4,15 +4,19 @@ import profilePic from '../assets/imgProfile.png'
 import cardAtm from '../assets/cardAtm.png'
 import { BsStarFill, BsGearFill, FiLogOut, FaUserCircle, FaPlaneDeparture, BiChevronDown, BiChevronRight } from 'react-icons/all'
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux';
+import Swal from 'sweetalert2'
+import { getUser } from '../redux/action/user'
 
-export default class Profile extends Component {
+class Profile extends Component {
   render () {
     return (
       <div style={styleCoba.warpAll} className="overflow-hidden">
         <div className="d-flex flex-row justify-content-center py-5 mx-md-5 gap-md-4">
           <div style={styleCoba.parentLeft} className="d-flex">
             <Image className="rounded-circle" src={profilePic} />
-            <Button style={styleCoba.btnLeft}>Select Photo</Button>
+            <input type="file" className="d-none" id="file-upload"/>
+              <label style={styleCoba.btnLeft} htmlFor="file-upload" >Select Photo</label>
             <h5 className="fw-bold py-2">Mike Kowalski</h5>
             <p>Medan, Indonesia</p>
             <div className="d-flex flex-row justify-content-between w-100 pt-4">
@@ -120,6 +124,13 @@ export default class Profile extends Component {
   }
 }
 
+const mapStateToProps = state => ({
+  auth: state.auth
+})
+const mapDispatchToProps = { }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Profile)
+
 const styleCoba = {
   warpAll: {
     backgroundColor: '#F5F6FA'
@@ -140,7 +151,8 @@ const styleCoba = {
     borderColor: '#7ECFC0',
     borderRadius: '10px',
     margin: '15px 0px',
-    padding: '10px 15px'
+    padding: '10px 15px',
+    border: 'solid 2px'
   },
   input: {
     borderTop: '0',
