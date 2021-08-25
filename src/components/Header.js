@@ -31,8 +31,8 @@ function Header (props) {
               />
           </Form>
           <Nav className="me-auto ">
-            <Nav.Link style={styleCoba.textMenu} className="pe-md-4  mt-3 mt-md-0" href="#features">Find Ticket</Nav.Link>
-            <Nav.Link style={styleCoba.textMenu} className="pe-md-4  mt-3 mt-md-0" href="mybooking">My Booking</Nav.Link>
+            <Nav.Link as={Link} to="/search" style={styleCoba.textMenu} className="pe-md-4  mt-3 mt-md-0" >Find Ticket</Nav.Link>
+            <Nav.Link as={Link} to="/mybooking" style={styleCoba.textMenu} className="pe-md-4  mt-3 mt-md-0">My Booking</Nav.Link>
 
           </Nav>
           {props.auth.token === null

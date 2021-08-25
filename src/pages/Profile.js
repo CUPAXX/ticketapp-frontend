@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import React, { Component } from 'react'
 import { Image, InputGroup, FormControl, Form, DropdownButton, Dropdown, Button, Row, FloatingLabel, Col } from 'react-bootstrap'
 import profilePic from '../assets/imgProfile.png'
@@ -6,19 +7,71 @@ import { BsStarFill, BsGearFill, FiLogOut, FaUserCircle, FaPlaneDeparture, BiChe
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux';
 import Swal from 'sweetalert2'
-import { getUser } from '../redux/action/user'
+import { getUser, updateProfile } from '../redux/action/user'
+const { REACT_APP_BACKEND_URL: URL } = process.env
 
 class Profile extends Component {
+  state={
+    dataUser: {},
+    showImage: null
+  }
+
+  componentDidMount () {
+    this.getUser()
+  }
+
+  getUser = () => {
+    const { token } = this.props.auth
+    this.props.getUser(token).then(() => {
+      this.setState({
+        dataUser: this.props.user.dataUser
+      })
+    })
+  }
+
+  data = (e) => {
+    e.preventDefault()
+    const { token } = this.props.auth
+    const { fullname, email, phone_number, city, postcode, address } = this.state.dataUser
+    const { showImage: picture } = this.state
+    const data = {
+      fullname,
+      email,
+      phone_number,
+      city,
+      address,
+      picture,
+      postcode
+    }
+    this.props.updateProfile(data, token).then(() => {
+      this.props.history.push('/')
+      this.props.history.replace('/profile')
+    })
+  }
+
   render () {
+    console.log(this.state)
     return (
       <div style={styleCoba.warpAll} className="overflow-hidden">
         <div className="d-flex flex-row justify-content-center py-5 mx-md-5 gap-md-4">
           <div style={styleCoba.parentLeft} className="d-flex">
-            <Image className="rounded-circle" src={profilePic} />
-            <input type="file" className="d-none" id="file-upload"/>
+            {this.state.dataUser.picture !== null
+              ? (
+              <Image className="rounded-circle" style={{ width: '130px', height: '130px' }} src={`${URL}${this.state.dataUser.picture}`} />
+                )
+              : (
+              <Image className="rounded-circle" style={{ width: '130px', height: '130px' }} src={profilePic} />
+                )}
+            <input type="file" onChange={e => this.setState({ showImage: e.target.files[0] })} className="d-none" id="file-upload"/>
               <label style={styleCoba.btnLeft} htmlFor="file-upload" >Select Photo</label>
-            <h5 className="fw-bold py-2">Mike Kowalski</h5>
-            <p>Medan, Indonesia</p>
+            <h5 className="fw-bold py-2">{this.state.dataUser.fullname}</h5>
+            {this.state.dataUser.address !== null && this.state.dataUser.address !== ''
+              ? (
+              <p>{this.state.dataUser.address}</p>
+                )
+              : (
+              <p>please add your address</p>
+                )}
             <div className="d-flex flex-row justify-content-between w-100 pt-4">
               <p className="fw-bold">Cards</p>
               <p className="fw-bold" style={{ color: '#7ECFC0' }}>+ Add</p>
@@ -49,7 +102,7 @@ class Profile extends Component {
                 <p style={{ color: '#7ECFC0', letterSpacing: '3px', fontSize: '13px' }}>PROFILE</p>
                 <h5 className="fw-bold">Profile</h5>
               </div>
-              <Form className="mt-4">
+              <Form onSubmit={this.data} className="mt-4">
                 <Row className="mb-2">
                   <Form.Group as={Col} controlId="formLeftLabel">
                     <div className="fw-bold">Contact</div>
@@ -62,28 +115,48 @@ class Profile extends Component {
                 <Row className="mb-3">
                   <Form.Group as={Col} controlId="formGridEmail">
                     <Form.Label style={{ paddingLeft: '10px', fontSize: '13px', fontWeight: '600', color: 'gray' }}>Email</Form.Label>
-                    <Form.Control style={styleCoba.input} type="email" placeholder="Example@gmail.com" />
+                    <Form.Control onChange={e => this.setState(prevState => ({
+                      dataUser: {
+                        ...prevState.dataUser,
+                        email: e.target.value
+                      }
+                    }))} style={styleCoba.input} type="email" placeholder="Example@gmail.com" value={this.state.dataUser.email} />
                   </Form.Group>
 
                   <Form.Group as={Col} controlId="formGridUsername">
                     <Form.Label style={{ paddingLeft: '10px', fontSize: '13px', fontWeight: '600', color: 'gray' }}>Username</Form.Label>
-                    <Form.Control style={styleCoba.input} type="text" placeholder="My UserName" />
+                    <Form.Control onChange={e => this.setState(prevState => ({
+                      dataUser: {
+                        ...prevState.dataUser,
+                        fullname: e.target.value
+                      }
+                    }))} style={styleCoba.input} type="text" placeholder="My UserName" value={this.state.dataUser.fullname} />
                   </Form.Group>
                 </Row>
 
                 <Row className="mb-3">
                   <Form.Group as={Col} controlId="formGridPhoneNumber">
                     <Form.Label style={{ paddingLeft: '10px', fontSize: '13px', fontWeight: '600', color: 'gray' }}>Phone Number</Form.Label>
-                    <Form.Control style={styleCoba.input} type="number" placeholder="08123123123" />
+                    <Form.Control onChange={e => this.setState(prevState => ({
+                      dataUser: {
+                        ...prevState.dataUser,
+                        phone_number: e.target.value
+                      }
+                    }))} style={styleCoba.input} type="number" placeholder="please add your phone number" value={this.state.dataUser.phone_number} />
                   </Form.Group>
 
                   <Form.Group as={Col} controlId="formGridCity">
                     <Form.Label style={{ paddingLeft: '10px', fontSize: '13px', fontWeight: '600', color: 'gray' }}>City</Form.Label>
-                    <Form.Select style={styleCoba.input} defaultValue="Medan">
-                      <option>Medan</option>
-                      <option>Jambi</option>
-                      <option>Bandung</option>
-                      <option>Jakarta</option>
+                    <Form.Select style={styleCoba.input} onChange={e => this.setState(prevState => ({
+                      dataUser: {
+                        ...prevState.dataUser,
+                        city: e.target.value
+                      }
+                    }))} defaultValue={this.state.dataUser.city}>
+                      <option value="Medan">Medan</option>
+                      <option value="Jambi">Jambi</option>
+                      <option value="Bandung">Bandung</option>
+                      <option value="Jakarta">Jakarta</option>
                     </Form.Select>
                   </Form.Group>
                 </Row>
@@ -98,7 +171,12 @@ class Profile extends Component {
 
                   <Form.Group as={Col} controlId="formGridAddress">
                     <Form.Label style={{ paddingLeft: '10px', fontSize: '13px', fontWeight: '600', color: 'gray' }}>Address</Form.Label>
-                    <Form.Control style={styleCoba.input} type="text" placeholder="Medan, Indonesia" />
+                    <Form.Control onChange={e => this.setState(prevState => ({
+                      dataUser: {
+                        ...prevState.dataUser,
+                        address: e.target.value
+                      }
+                    }))} style={styleCoba.input} type="text" placeholder="please add your address example: Medan, Indonesia" value={this.state.dataUser.address} />
                   </Form.Group>
                 </Row>
 
@@ -108,7 +186,12 @@ class Profile extends Component {
 
                   <Form.Group as={Col} controlId="formGridPostCode">
                     <Form.Label style={{ paddingLeft: '10px', fontSize: '13px', fontWeight: '600', color: 'gray' }}>Post Code</Form.Label>
-                    <Form.Control style={styleCoba.input} type="number" placeholder="36139" />
+                    <Form.Control onChange={e => this.setState(prevState => ({
+                      dataUser: {
+                        ...prevState.dataUser,
+                        postcode: e.target.value
+                      }
+                    }))} style={styleCoba.input} type="number" placeholder="please add your postcode example: 36139" value={this.state.dataUser.postcode} />
                   </Form.Group>
                 </Row>
 
@@ -125,9 +208,10 @@ class Profile extends Component {
 }
 
 const mapStateToProps = state => ({
-  auth: state.auth
+  auth: state.auth,
+  user: state.user
 })
-const mapDispatchToProps = { }
+const mapDispatchToProps = { getUser, updateProfile }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile)
 
