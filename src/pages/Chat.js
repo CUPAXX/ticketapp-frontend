@@ -1,14 +1,23 @@
-import React, { Component } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { Image, Button, Form } from 'react-bootstrap'
 import { BiCheckDouble, BiDotsVerticalRounded, FaPlaneDeparture, FaSearchLocation } from 'react-icons/all'
 import airline from '../assets/airlineIcon.png'
 import qr from '../assets/qr.png'
 import imgChat from '../assets/imgChat.png'
 import ItemChat from '../components/ChatItemList'
+import { chatList } from '../redux/action/chat'
+import { connect, useDispatch, useSelector } from 'react-redux'
 
-export default class Chat extends Component {
-  render () {
-    return (
+const Chat = (props) => {
+  const { user } = useSelector(state => state.chat);
+  const { token } = useSelector(state => state.auth);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(chatList(token));
+  }, [token]);
+
+  return (
       <div style={{ backgroundColor: '#7ECFC0' }} className="py-4 d-flex justify-content-center">
         <div style={{ borderRadius: '15px', padding: '3em' }} className="bg-white d-md-flex d-none flex-column w-50">
           <p style={{ color: '#7ECFC0', letterSpacing: '3px', fontSize: '13px' }}>chat</p>
@@ -16,7 +25,6 @@ export default class Chat extends Component {
             <h6 className="fw-bold">Chat</h6>
             <p className="fw-bold" style={{ color: '#7ECFC0', fontSize: '13px' }}>Filter</p>
           </div>
-          <ItemChat />
           <ItemChat />
 
         </div>
@@ -40,9 +48,10 @@ export default class Chat extends Component {
           </div>
         </div>
       </div>
-    )
-  }
+  )
 }
+
+export default Chat;
 
 const styleCoba = {
   input: {

@@ -5,15 +5,15 @@ import airline from '../assets/airlineIcon.png'
 import qr from '../assets/qr.png'
 import imgChat from '../assets/imgChat.png'
 
-export default function ChatItemList () {
+const ChatItemList = ({ fullname, message }) => {
   return (
     <div className="d-flex flex-column m-2">
             <div className="d-flex flex-row justify-content-between align-items-center border-1 border-bottom p-2">
               <div className="d-flex flex-row align-items-center gap-3">
                 <Image src={imgChat} />
                 <div className="d-flex flex-column">
-                  <h6>Soham Henry</h6>
-                  <p>Me: Bro, just fuck off</p>
+                  <h6>{fullname}</h6>
+                  <p>{message}</p>
                 </div>
               </div>
               <div className="d-flex flex-column gap-2">
@@ -25,3 +25,5 @@ export default function ChatItemList () {
           </div>
   )
 }
+
+export default ChatItemList

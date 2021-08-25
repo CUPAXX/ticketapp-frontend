@@ -1,4 +1,5 @@
 const initialState = {
+  user: [],
   data: [],
   allData: [],
   userData: [],
@@ -8,22 +9,10 @@ const initialState = {
 
 const chat = (state = initialState, action) => {
   switch (action.type) {
-    case 'USER_SEARCH': {
-      return {
-        ...state,
-        userData: action.payload
-      }
-    }
-    case 'USER_SEARCH_FAILED': {
-      return {
-        ...state,
-        errMsg: action.payload
-      }
-    }
     case 'CHAT_LIST': {
       return {
         ...state,
-        data: action.payload
+        user: action.payload
       }
     }
     case 'CHAT_LIST_ALL': {
