@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react'
-import { Image, Button, Form } from 'react-bootstrap'
+import { Image, Button, Form, InputGroup, FormControl } from 'react-bootstrap'
 import { BiCheckDouble, BiDotsVerticalRounded, FaPlaneDeparture, FaSearchLocation } from 'react-icons/all'
 import airline from '../assets/airlineIcon.png'
 import qr from '../assets/qr.png'
@@ -7,14 +7,27 @@ import imgChat from '../assets/imgChat.png'
 import ItemChat from '../components/ChatItemList'
 import { chatList } from '../redux/action/chat'
 import { connect, useDispatch, useSelector } from 'react-redux'
+import { io } from 'socket.io-client';
+import { getUser } from '../redux/action/user'
+import { Link } from 'react-router-dom'
+
+const { REACT_APP_BACKEND_URL: URL } = process.env
 
 const Chat = (props) => {
-  const { user } = useSelector(state => state.chat);
+  const { ListChat } = props.chat;
+  const socket = io(`${URL}`);
+
+  const { dataUser } = useSelector(state => state.user);
+  // const { details } = useSelector(state => state.chat);
   const { token } = useSelector(state => state.auth);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(chatList(token));
+  }, [token]);
+
+  useEffect(() => {
+    dispatch(getUser(token));
   }, [token]);
 
   return (
@@ -25,7 +38,24 @@ const Chat = (props) => {
             <h6 className="fw-bold">Chat</h6>
             <p className="fw-bold" style={{ color: '#7ECFC0', fontSize: '13px' }}>Filter</p>
           </div>
-          <ItemChat />
+
+          {ListChat.map(chat => {
+            return chat.user.id !== dataUser.id
+              ? <ItemChat
+            img={`${URL}${chat.user.picture}`}
+            to={`/chatroom/${chat.user.id}`}
+            key={chat.id}
+            fullname={chat.user.fullname}
+            message={chat.message}
+            />
+              : <ItemChat
+              img={`${URL}${dataUser.picture}`}
+              to={`/chatroom/${chat.sender}`}
+              key={chat.id}
+              fullname={dataUser.fullname}
+              message={chat.message}
+              />
+          })}
 
         </div>
 
@@ -51,7 +81,15 @@ const Chat = (props) => {
   )
 }
 
-export default Chat;
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+  user: state.user,
+  chat: state.chat
+})
+
+const mapDispatchToProps = { getUser, chatList }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Chat)
 
 const styleCoba = {
   input: {
