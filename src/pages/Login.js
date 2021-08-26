@@ -76,7 +76,7 @@ class Login extends Component {
             </Form.Group>
 
             <div style={styleCoba.btnParen}>
-              <Button style={styleCoba.btnSubmit} variant="primary" type="submit">Sign Up</Button>
+              <Button style={styleCoba.btnSubmit} variant="primary" type="submit">Login</Button>
             </div>
 
             <h3 style={styleCoba.textBtm}>Did you forgot your password?</h3>

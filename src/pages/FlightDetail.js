@@ -6,27 +6,26 @@ import { FaPlaneDeparture, BiCheckCircle, DiVisualstudio, FiChevronDown, AiFillW
 import airlineIcon from '../assets/airlineIcon.png'
 import { useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { addToBooking } from '../redux/action/ticket'
+import { addToBooking, getTicket } from '../redux/action/ticket'
 import NoFlightDetail from '../components/NoFlightDetail'
 
 const { REACT_APP_BACKEND_URL: URL } = process.env
 
-const FlightDetail = (props) => {
+const FlightDetail = () => {
   const ticketDetail = useLocation()
-  // const { token } = useSelector(state => state.auth)
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
+  const { token } = useSelector(state => state.auth)
+  const { dataUser } = useSelector(state => state.user)
   const history = useHistory();
 
   const transaction = {
     total_amount: 1,
-    id_ticket: ticketDetail.id
+    id_ticket: ticketDetail?.state.id
   }
 
   const [modalParent, setModalParent] = useState(false);
   const [modal, setModal] = useState(false);
   const [book, setBook] = useState(false);
-
-  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ1c2VyMUBtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJFJwY0E2NHlqeW1EbE11SXdZYjZzSWVoQVdzWWxkbmpXTDZnNnhiaEZSTWRCOU5HNHVwam51IiwiaWF0IjoxNjI5OTY3MDU1LCJleHAiOjE2MzAwNTM0NTV9.ZSaW56sSyfCN4N_oa_-ekDuv6lPbT1RQ73GCtGM5bcg'
 
   const handleProceedToPayment = () => {
     dispatch(addToBooking(token, transaction));
@@ -34,7 +33,7 @@ const FlightDetail = (props) => {
     setBook(true);
   };
 
-  console.log(ticketDetail, 'test 1234')
+  console.log(dataUser, 'test 1234')
 
   const showModalParent = () => {
     setModalParent(true)
@@ -46,6 +45,7 @@ const FlightDetail = (props) => {
       setTimeout(() => {
         setModalParent(false)
         setBook(false)
+        dispatch(getTicket(token))
         history.push('/mybooking')
       }, 900)
     }
@@ -83,11 +83,11 @@ const FlightDetail = (props) => {
             <div className="parentLeftDetail">
               <Form.Label className="ps-2">Full Name</Form.Label>
                 <InputGroup className="mb-3">
-                <FormControl style={styleCoba.input} placeholder="Example Full Name" />
+                <FormControl value={dataUser.fullname} style={styleCoba.input} placeholder="Example Full Name" />
               </InputGroup>
               <Form.Label className="ps-2">Email</Form.Label>
                 <InputGroup className="mb-3">
-                <FormControl type="email" style={styleCoba.input} placeholder="example@gmail.com" />
+                <FormControl value={dataUser.email} type="email" style={styleCoba.input} placeholder="example@gmail.com" />
               </InputGroup>
               <Form.Label className="ps-2">Phone Number</Form.Label>
               <div className="d-flex flex-row align-items-center">
@@ -97,7 +97,7 @@ const FlightDetail = (props) => {
                   <option value="3">+99</option>
                 </Form.Select>
                 <InputGroup >
-                  <FormControl style={styleCoba.input2} placeholder="0811123456" />
+                  <FormControl value={dataUser.phone_number} style={styleCoba.input2} placeholder="0811123456" />
                 </InputGroup>
               </div>
               <div className="d-flex flex-row align-items-center gap-3 p-3 mt-5" style={{ backgroundColor: 'rgba(242, 69, 69, 0.1)', borderRadius: '10px' }}>
@@ -127,7 +127,7 @@ const FlightDetail = (props) => {
               </div>
               <Form.Label className="ps-2">Full Name</Form.Label>
                 <InputGroup className="mb-3">
-                <FormControl style={styleCoba.input} placeholder="Example Full Name" />
+                <FormControl value={dataUser.fullname} style={styleCoba.input} placeholder="Example Full Name" />
               </InputGroup>
               <Form.Label className="ps-2">Nationallity</Form.Label>
               <div className="d-flex flex-row align-items-center">
