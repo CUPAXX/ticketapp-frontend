@@ -4,17 +4,85 @@ const { REACT_APP_BACKEND_URL: URL } = process.env
 
 export const getTickets = data => {
   return async dispatch => {
-    console.log('action', data)
     try {
       dispatch({ type: 'GET_TICKET', payload: [] });
       const { data: results } = await http().get(
         `${URL}/tickets/tickets?departure=${data.departure}&destination=${data.destination}&searchClass=${data.classTicket}`
       );
       dispatch({ type: 'GET_TICKET', payload: results.results });
-      console.log(results.results);
     } catch (err) {
-      console.log(err);
+
       // dispatch({type: 'SET_LOADING', payload: false});
     }
   };
 };
+
+export const getTicket = (token) => {
+  return async (dispatch) => {
+    try {
+      const { data } = await http(token).get(`${URL}/transactions/transaction`)
+      dispatch({
+        type: 'GET_BOOKING',
+        payload: data.results
+      })
+      setTimeout(() => {
+        dispatch({ type: 'TICKET_RESET' });
+      }, 3000);
+    } catch (err) {
+      dispatch({
+        type: 'GET_TICKET_FAILED',
+        payload: err.response.data.message
+      })
+      setTimeout(() => {
+        dispatch({ type: 'TICKET_RESET' });
+      }, 3000);
+    }
+  }
+}
+
+export const getDetailTicket = (id, token) => {
+  console.log(id, token)
+  return async (dispatch) => {
+    try {
+      const { data } = await http(token).get(`${URL}/transactions/transaction/${id}`)
+      dispatch({
+        type: 'GET_DETAIL_TICKET',
+        payload: data.results
+      })
+      setTimeout(() => {
+        dispatch({ type: 'TICKET_RESET' });
+      }, 3000);
+    } catch (err) {
+      dispatch({
+        type: 'GET_DETAIL_TICKET_FAILED',
+        payload: err.response.data.message
+      })
+      setTimeout(() => {
+        dispatch({ type: 'TICKET_RESET' });
+      }, 3000);
+    }
+  }
+}
+
+export const payTicket = (id, token) => {
+  return async (dispatch) => {
+    try {
+      const { data } = await http(token).put(`${URL}/transactions/proceed-to-payment/${id}`)
+      dispatch({
+        type: 'PAY_TICKET',
+        payload: data.data
+      })
+      setTimeout(() => {
+        dispatch({ type: 'TICKET_RESET' });
+      }, 3000);
+    } catch (err) {
+      dispatch({
+        type: 'PAY_TICKET_FAILED',
+        payload: err.response.data.message
+      })
+      setTimeout(() => {
+        dispatch({ type: 'TICKET_RESET' });
+      }, 3000);
+    }
+  }
+}
