@@ -4,13 +4,14 @@ import { BiCheckDouble, BiDotsVerticalRounded, FaPlaneDeparture } from 'react-ic
 import airline from '../assets/airlineIcon.png'
 import qr from '../assets/qr.png'
 import imgChat from '../assets/imgChat.png'
+import imgUser from '../assets/user.png'
 
-export default function ChatBubbleLeft ({ fullname, message }) {
+export default function ChatBubbleLeft ({ fullname, message, img }) {
   return (
     <div className="d-flex flex-column m-2">
       <div className="d-flex flex-row justify-content-between align-items-center border-1 border-bottom p-2">
         <div className="d-flex flex-row align-items-center gap-3">
-          <Image src={imgChat} />
+          <Image className="rounded-circle" style={styleCoba.img} src={imgUser} />
           <div className="d-flex flex-column">
             <h6></h6>
             <p>{message}</p>
@@ -24,4 +25,11 @@ export default function ChatBubbleLeft ({ fullname, message }) {
 
     </div>
   )
+}
+
+const styleCoba = {
+  img: {
+    width: 50,
+    height: 50
+  }
 }

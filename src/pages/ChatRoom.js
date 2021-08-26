@@ -84,13 +84,14 @@ const ChatRoom = (props) => {
         {RoomChat.map(chat => {
           return chat.sender !== dataUser.id
             ? <ChatBubbleLeft
-
             key={chat.id}
+            // img={`${URL}${dataUser.picture}`}
             message={chat.message}
             />
             : <ChatBubbleRight
 
               key={chat.id}
+              img={`${URL}${dataUser.picture}`}
               message={chat.message}
               />
         })}
