@@ -4,7 +4,7 @@ const initialState = {
   succMsg: ''
 }
 
-const auth = (state = initialState, action) => {
+const user = (state = initialState, action) => {
   switch (action.type) {
     case 'GET_USER': {
       return {
@@ -49,4 +49,4 @@ const auth = (state = initialState, action) => {
   }
 }
 
-export default auth
+export default user

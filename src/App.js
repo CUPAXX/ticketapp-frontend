@@ -31,7 +31,7 @@ class App extends React.Component {
         <Route path="/search" component={Search}/>
         <Route path="/detail" component={FlightDetail}/>
         <Route path="/mybooking" component={MyBooking}/>
-        <Route path="/bookingdetail" component={BookingDetail}/>
+        <Route path="/bookingdetail/:id" component={BookingDetail}/>
         <Route path="/profile" component={Profile}/>
         <Route path="/chat" component={Chat}/>
         <Route path="/chatroom/:id" component={ChatRoom}/>
