@@ -3,25 +3,21 @@ import React, { useState, useEffect } from 'react'
 import { Container, Navbar, Nav, NavDropdown, Image, Form, Button, FormControl } from 'react-bootstrap';
 import icon from '../assets/icon.png';
 import { AiOutlineMail, BsBell, FaSearchLocation } from 'react-icons/all';
-import { useLocation, Link } from 'react-router-dom'
 import { connect, useDispatch, useSelector } from 'react-redux'
 import headerImg from '../assets/headerImg.png'
 import { getUser } from '../redux/action/user'
 import imgUser from '../assets/user.png'
 
-const { REACT_APP_BACKEND_URL: URL } = process.env
 import { useLocation, Link, useHistory } from 'react-router-dom'
-import { connect, useDispatch } from 'react-redux';
 import { getTickets } from '../redux/action/ticket'
 
+const { REACT_APP_BACKEND_URL: URL } = process.env
 
 function Header (props) {
   const [search, setSearch] = useState('')
   const location = useLocation();
-  const dispatch = useDispatch()
   const history = useHistory()
   console.log(location.pathname);
-
 
   const { dataUser } = useSelector(state => state.user);
 
@@ -31,8 +27,6 @@ function Header (props) {
   useEffect(() => {
     dispatch(getUser(token));
   }, [token]);
-  return (
-
 
   const onSearch = (e) => {
     e.preventDefault()
@@ -44,6 +38,7 @@ function Header (props) {
     dispatch(getTickets(form))
     history.push('/search')
   }
+
   return (
     <React.Fragment>
       {location.pathname !== '/signup' && location.pathname !== '/forgot' && location.pathname !== '/login'
