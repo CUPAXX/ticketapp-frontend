@@ -4,7 +4,7 @@ import { Image, InputGroup, FormControl, Form, DropdownButton, Dropdown, Button,
 import profilePic from '../assets/imgProfile.png'
 import cardAtm from '../assets/cardAtm.png'
 import { BsStarFill, BsGearFill, FiLogOut, FaUserCircle, FaPlaneDeparture, BiChevronDown, BiChevronRight } from 'react-icons/all'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux';
 import Swal from 'sweetalert2'
 import { getUser, updateProfile } from '../redux/action/user'
@@ -260,7 +260,7 @@ const mapDispatchToProps = {
   getUser, updateProfile, authLogout
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Profile)
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Profile))
 
 const styleCoba = {
   warpAll: {
