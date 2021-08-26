@@ -10,6 +10,11 @@ const ticket = (state = initialState, action) => {
         data: action.payload
       }
     }
+    case 'PROCEED_TO_PAYMENT': {
+      return {
+        ...state
+      }
+    }
     default: {
       return {
         ...state

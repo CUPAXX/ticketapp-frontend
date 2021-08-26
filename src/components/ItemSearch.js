@@ -5,10 +5,16 @@ import { Container, Row, Col, Image, Form, Button, Carousel, Accordion } from 'r
 import { BiChevronDown } from 'react-icons/bi';
 import { FaHamburger, FaLuggageCart, FaPlaneDeparture } from 'react-icons/fa';
 import airlineIcon from '../assets/airlineIcon.png'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
-export default function ItemSearch ({ img, airline, codeDeparture, timeDep, codeArrival, timeArr, price, facilities }) {
+export default function ItemSearch ({ img, airline, codeDeparture, timeDep, codeArrival, timeArr, price, facilities, ticketDetail }) {
+  const history = useHistory();
+
+  const handleGoToDetail = () => {
+    history.push('/detail', ticketDetail);
+  }
+
   return (
     <div className="mb-4" style={styleCoba.componentRight}>
       <div className="d-flex flex-row align-items-center">
@@ -38,7 +44,7 @@ export default function ItemSearch ({ img, airline, codeDeparture, timeDep, code
           <h5><span style={{ color: '#7ECFC0' }}>$ {price}</span> /pax</h5>
         </div>
         <div className="d-md-block d-none">
-          <Link to="/detail"><Button style={styleCoba.btn} >Select</Button></Link>
+          <Button onClick={() => handleGoToDetail()} style={styleCoba.btn} >Select</Button>
         </div>
       </div>
       <div style={{ color: '#7ECFC0' }} className="d-flex flex-row align-items-center">

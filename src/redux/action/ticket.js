@@ -18,3 +18,18 @@ export const getTickets = data => {
     }
   };
 };
+
+export const addToBooking = (token, setData) => async (dispatch) => {
+  const form = new URLSearchParams();
+  form.append('total_amount', setData.total_amount);
+  form.append('id_ticket', setData.id_ticket)
+  try {
+    const { data } = await http(token).post(`${URL}/transactions/create-transaction`, form);
+    dispatch({
+      type: 'PROCEED_TO_PAYMENT',
+      payload: data.data
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};

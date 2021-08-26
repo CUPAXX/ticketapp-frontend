@@ -1,14 +1,90 @@
-import React, { Component } from 'react'
-import { Image, InputGroup, FormControl, Form, DropdownButton, Dropdown, Button } from 'react-bootstrap'
+import React, { useEffect, useState } from 'react'
+import { Image, InputGroup, FormControl, Form, DropdownButton, Dropdown, Button, Modal, Spinner } from 'react-bootstrap'
 import { BsDot } from 'react-icons/bs'
 import { FaPlaneDeparture, BiCheckCircle, DiVisualstudio, FiChevronDown, AiFillWarning, AiFillStar, FaHamburger, TiWiFi, ImManWoman } from 'react-icons/all'
 import airlineIcon from '../assets/airlineIcon.png'
+import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { addToBooking } from '../redux/action/ticket'
+import NoFlightDetail from '../components/NoFlightDetail'
 
-export default class FlightDetail extends Component {
-  render () {
-    return (
+const { REACT_APP_BACKEND_URL: URL } = process.env
+
+const FlightDetail = (props) => {
+  const ticketDetail = props.location.state
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const transaction = {
+    total_amount: 1,
+    id_ticket: ticketDetail?.id
+  }
+
+  const [modalParent, setModalParent] = useState(false);
+  const [modal, setModal] = useState(false);
+  const [book, setBook] = useState(false);
+
+  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ1c2VyMUBtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJFJwY0E2NHlqeW1EbE11SXdZYjZzSWVoQVdzWWxkbmpXTDZnNnhiaEZSTWRCOU5HNHVwam51IiwiaWF0IjoxNjI5OTY3MDU1LCJleHAiOjE2MzAwNTM0NTV9.ZSaW56sSyfCN4N_oa_-ekDuv6lPbT1RQ73GCtGM5bcg'
+
+  const handleProceedToPayment = () => {
+    dispatch(addToBooking(token, transaction));
+    setModal(false);
+    setBook(true);
+  };
+
+  const showModalParent = () => {
+    setModalParent(true)
+    setModal(true)
+  }
+
+  useEffect(() => {
+    if (book) {
+      setTimeout(() => {
+        setModalParent(false)
+        setBook(false)
+        history.push('/mybooking')
+      }, 900)
+    }
+  }, [book])
+
+  // useEffect(() => {
+  //   if (props.location.state.length < 1) {
+  //     history.push('/search')
+  //     console.log(true)
+  //   } else {
+  //     console.log(false)
+  //   }
+  // }, [history, ticketDetail])
+
+  return ticketDetail !== undefined
+    ? (
       <div style={styleCoba.warpAll}>
         <div className="parentDetail "/>
+          {modalParent && (
+            <div style={styleCoba.modalParent}>
+              <div>
+              </div>
+              {modal && (
+                <Modal.Dialog>
+                  <Modal.Header>
+                    <Modal.Title>Modal title</Modal.Title>
+                  </Modal.Header>
+
+                  <Modal.Body>
+                    <p>Add to booking list ?</p>
+                  </Modal.Body>
+
+                  <Modal.Footer>
+                    <Button onClick={() => {
+                      setModal(false);
+                      setModalParent(false)
+                    }} variant="secondary">Close</Button>
+                    <Button onClick={handleProceedToPayment} variant="primary">Add to booking list</Button>
+                  </Modal.Footer>
+                </Modal.Dialog>
+              )}
+              </div>
+          )}
         <div style={styleCoba.parentAll} className="d-none d-md-flex flex-md-row gap-md-4 pb-md-5 mx-md-5">
           <div className="d-flex flex-column flex-grow-1 gap-3">
             <h5 style={{ color: 'white' }}>Contact Person Details</h5>
@@ -84,7 +160,7 @@ export default class FlightDetail extends Component {
                 Get travel compensation up to $ 10.000,00
               </div>
             </div>
-
+              <Button onClick={() => showModalParent()} style={styleCoba.btnBook}>BOOK FLIGHT</Button>
           </div>
           <div className="d-flex flex-column gap-3">
             <div className="d-flex flex-row justify-content-between">
@@ -94,18 +170,24 @@ export default class FlightDetail extends Component {
             <div className="parentRightDetail d-flex flex-column ">
               <div className="d-flex flex-column w-75 gap-3">
                 <div className="d-flex flex-row align-items-center">
+                  {ticketDetail.airline.picture !== null
+                    ? (
+                    <Image className="me-4" src={`${URL}${ticketDetail.airline.picture}`} />
+                      )
+                    : (
                   <Image className="me-4" src={airlineIcon} />
-                  <h6>Garuda Indonesia</h6>
+                      )}
+                  <h6>{`${ticketDetail.airline.name}`}</h6>
                 </div>
                 <div className="d-flex flex-row justify-content-between">
-                  <h4>Medan (IDN)</h4>
+                  <h4>{`${ticketDetail.departure}`} {`${ticketDetail.code_departure}`}</h4>
                   <FaPlaneDeparture />
-                  <h4>Japan (JPN)</h4>
+                  <h4>{`${ticketDetail.destination}`} {`${ticketDetail.code_destination}`}</h4>
                 </div>
                 <div className="d-flex flex-row gap-2">
                   <h5>Sunday, 15 August 2020</h5>
                   <BsDot />
-                  <h5>12:33 - 14:44</h5>
+                  <h5>{`${ticketDetail.departure_time}`} - {`${ticketDetail.arrival_time}`}</h5>
                 </div>
                 <div className="d-flex flex-column gap-2 pb-3">
                   <div className="d-flex flex-row align-items-center">
@@ -121,7 +203,7 @@ export default class FlightDetail extends Component {
               <div className="d-flex flex-row align-items-center justify-content-between pt-3 border-top">
                 <h5 className=" fs-6">Total Payment</h5>
                 <div className="d-flex flex-row align-items-center">
-                  <h4 style={{ color: '#7ECFC0' }}>$ 145,00</h4>
+                  <h4 style={{ color: '#7ECFC0' }}>$ {`${ticketDetail.price}`}</h4>
                   <FiChevronDown color="#7ECFC0" size={20}/>
                 </div>
               </div>
@@ -137,9 +219,9 @@ export default class FlightDetail extends Component {
             <div className="parentRightDetailSec d-flex flex-column ">
             <div className="d-flex flex-column gap-4">
                 <div className="d-flex flex-row justify-content-between">
-                  <h4>Medan (IDN)</h4>
+                  <h4>{`${ticketDetail.departure}`} {`${ticketDetail.code_departure}`}</h4>
                   <FaPlaneDeparture />
-                  <h4>Japan (JPN)</h4>
+                  <h4>{`${ticketDetail.destination}`} {`${ticketDetail.code_destination}`}</h4>
                 </div>
                 <div className="d-flex flex-row align-items-center justify-content-between">
                   <Image className="me-4" src={airlineIcon} fluid/>
@@ -157,19 +239,19 @@ export default class FlightDetail extends Component {
                 <div className="d-flex flex-row justify-content-between">
                   <div>
                     <p>Code</p>
-                    <h6>AB-221</h6>
+                    <h6>{`${ticketDetail.seat}`}</h6>
                   </div>
                   <div>
                     <p>Class</p>
-                    <h6>Economy</h6>
+                    <h6>{`${ticketDetail.class}`}</h6>
                   </div>
                   <div>
                     <p>Terminal</p>
-                    <h6>A</h6>
+                    <h6>{`${ticketDetail.terminal}`}</h6>
                   </div>
                   <div>
                     <p>Gate</p>
-                    <h6>221</h6>
+                    <h6>{`${ticketDetail.gate}`}</h6>
                   </div>
                 </div>
               </div>
@@ -191,14 +273,16 @@ export default class FlightDetail extends Component {
             </div>
             <div className="d-flex flex-row justify-content-between align-items-center mt-3">
               <p>Total you’ll pay</p>
-              <h5 style={{ color: '#7ECFC0' }}>$ 145,00</h5>
+              <h5 style={{ color: '#7ECFC0' }}>$ {`${ticketDetail.price}`}</h5>
             </div>
-            <Button style={styleCoba.btnBook}>BOOK FLIGHT</Button>
+            <Button onClick={() => showModalParent()} style={styleCoba.btnBook}>BOOK FLIGHT</Button>
           </div>
         </div>
       </div>
-    )
-  }
+      )
+    : (
+    <NoFlightDetail />
+      )
 }
 
 const styleCoba = {
@@ -207,6 +291,20 @@ const styleCoba = {
   },
   parentAll: {
     marginTop: '-6em'
+  },
+  modalParent: {
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100vh',
+    width: '100vw',
+    padding: '20%',
+    position: 'fixed',
+    zIndex: 1,
+    top: '0',
+    left: '0'
   },
   input: {
     borderTop: '0',
@@ -267,3 +365,5 @@ const styleCoba = {
     marginBottom: '2em'
   }
 }
+
+export default FlightDetail
