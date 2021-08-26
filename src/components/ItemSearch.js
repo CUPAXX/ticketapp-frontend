@@ -6,7 +6,7 @@ import { BiChevronDown } from 'react-icons/bi';
 import { FaHamburger, FaLuggageCart, FaPlaneDeparture } from 'react-icons/fa';
 import airlineIcon from '../assets/airlineIcon.png'
 import { Link, useHistory } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 
 export default function ItemSearch ({ img, airline, codeDeparture, timeDep, codeArrival, timeArr, price, facilities, ticketDetail }) {
   const history = useHistory();
