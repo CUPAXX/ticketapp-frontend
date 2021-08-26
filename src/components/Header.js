@@ -1,16 +1,30 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Container, Navbar, Nav, NavDropdown, Image, Form, Button, FormControl } from 'react-bootstrap';
 import icon from '../assets/icon.png';
 import { AiOutlineMail, BsBell, FaSearchLocation } from 'react-icons/all';
-import { useLocation, Link } from 'react-router-dom'
+import { useLocation, Link, useHistory } from 'react-router-dom'
 import headerImg from '../assets/headerImg.png'
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
+import { getTickets } from '../redux/action/ticket'
 
 function Header (props) {
+  const [search, setSearch] = useState('')
   const location = useLocation();
+  const dispatch = useDispatch()
+  const history = useHistory()
   console.log(location.pathname);
-  return (
 
+  const onSearch = (e) => {
+    e.preventDefault()
+    const form = {
+      departure: '',
+      destination: search,
+      classTicket: ''
+    }
+    dispatch(getTickets(form))
+    history.push('/search')
+  }
+  return (
     <React.Fragment>
       {location.pathname !== '/signup' && location.pathname !== '/forgot' && location.pathname !== '/login'
         ? (
@@ -20,14 +34,16 @@ function Header (props) {
 
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
-          <Form className="position-relative d-flex justify-content-between align-items-center d-md-flex justify-content-md-between align-items-md-center ms-auto  mt-3 mt-md-0 pe-md-4">
-            <Link to="/search" style={styleCoba.searchIcon}><FaSearchLocation /> </Link>
+          <Form onSubmit={onSearch} className="position-relative d-flex justify-content-between align-items-center d-md-flex justify-content-md-between align-items-md-center ms-auto  mt-3 mt-md-0 pe-md-4">
+            <Button type='submit' style={styleCoba.searchIcon}><FaSearchLocation /> </Button>
               <FormControl
                 type="search"
                 placeholder="Where you want to go?"
                 className="mr-2"
                 aria-label="Search"
                 style={styleCoba.searchInput}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
               />
           </Form>
           <Nav className="me-auto ">

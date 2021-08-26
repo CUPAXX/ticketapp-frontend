@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-key */
 import { Wifi } from '@material-ui/icons';
 import React from 'react'
 import { Container, Row, Col, Image, Form, Button, Carousel, Accordion } from 'react-bootstrap';
@@ -5,24 +6,25 @@ import { BiChevronDown } from 'react-icons/bi';
 import { FaHamburger, FaLuggageCart, FaPlaneDeparture } from 'react-icons/fa';
 import airlineIcon from '../assets/airlineIcon.png'
 import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
-export default function ItemSearch () {
+export default function ItemSearch ({ img, airline, codeDeparture, timeDep, codeArrival, timeArr, price, facilities }) {
   return (
     <div className="mb-4" style={styleCoba.componentRight}>
       <div className="d-flex flex-row align-items-center">
-        <Image className="d-md-block d-none" src={airlineIcon} style={{ marginRight: '25px' }}/>
-        <h6>Garuda Indonesia</h6>
+        <Image className="d-md-block d-none" src={img} style={{ marginRight: '25px', width: '100px', height: '70px', objectFit: 'cover' }}/>
+        <h6>{airline}</h6>
       </div>
       <div className=" d-flex flex-row align-items-center justify-content-between d-md-flex flex-md-row justify-content-md-between align-items-md-center mt-4">
         <div className="d-flex flex-row gap-md-3 gap-2">
           <div className="d-flex flex-column align-items-center">
-            <h4>IDN</h4>
-            <p>12:33</p>
+            <h4>{codeDeparture}</h4>
+            <p>{timeDep}</p>
           </div>
           <FaPlaneDeparture size={30} style={{ paddingTop: '10px' }}/>
           <div className="d-flex flex-column align-items-center">
-            <h4>JPN</h4>
-            <p>12:33</p>
+            <h4>{codeArrival}</h4>
+            <p>{timeArr}</p>
           </div>
         </div>
         <div className="d-md-flex d-none flex-column align-items-center">
@@ -30,12 +32,10 @@ export default function ItemSearch () {
           <p>(1 transit)</p>
         </div>
         <div className="d-md-flex d-none flex-row align-items-center gap-2">
-          <FaLuggageCart size={20} />
-          <FaHamburger size={20} />
-          <Wifi size={20} />
+          {facilities}
         </div>
         <div>
-          <h5><span style={{ color: '#7ECFC0' }}>$ 214,00</span> /pax</h5>
+          <h5><span style={{ color: '#7ECFC0' }}>$ {price}</span> /pax</h5>
         </div>
         <div className="d-md-block d-none">
           <Link to="/detail"><Button style={styleCoba.btn} >Select</Button></Link>
