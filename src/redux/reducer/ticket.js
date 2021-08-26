@@ -57,6 +57,11 @@ const ticket = (state = initialState, action) => {
         succMsg: ''
       }
     }
+    case 'PROCEED_TO_PAYMENT': {
+      return {
+        ...state
+      }
+    }
     default: {
       return {
         ...state

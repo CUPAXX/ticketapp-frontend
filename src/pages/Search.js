@@ -246,6 +246,7 @@ function Search () {
             return (
               <ItemSearch
                 airline={res.airline.name}
+                ticketDetail={res}
                 codeDeparture={res.code_departure}
                 codeArrival={res.code_destination}
                 img={`http://localhost:8080${res.airline.picture}`}
