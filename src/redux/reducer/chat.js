@@ -43,8 +43,7 @@ const chat = (state = initialState, action) => {
     // }
     case 'DELETE_CHAT': {
       return {
-        ...state,
-        allData: []
+        ...state
       }
     }
 
