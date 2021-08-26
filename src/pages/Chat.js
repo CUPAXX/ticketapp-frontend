@@ -70,6 +70,8 @@ const Chat = (props) => {
     />
   </InputGroup>
   </form>
+
+  <div style={styleCoba.wrap2} >
 {search.length <= 0
   ? ListChat.map(chat => {
     return chat.user.id !== dataUser.id
@@ -79,6 +81,7 @@ const Chat = (props) => {
             key={chat.id}
             fullname={chat.user.fullname}
             message={chat.message}
+            // time={chat.createdAt}
             time={chat.createdAt.slice(11, 16)}
             />
       : <ItemChat
@@ -93,13 +96,14 @@ const Chat = (props) => {
 
   : searchData.map(res => {
     return <ItemChat
-    img={`${URL}${res.picture}`}
-    to={`/chatroom/${res.id}`}
-    key={res.id}
-    fullname={res.fullname}
-    />
+              img={`${URL}${res.picture}`}
+              to={`/chatroom/${res.id}`}
+              key={res.id}
+              fullname={res.fullname}
+              />
   })
-  }
+            }
+            </div>
 
         </div>
 
@@ -139,5 +143,11 @@ const styleCoba = {
   input: {
     border: 'none',
     backgroundColor: '#F5F5F5'
+  },
+  wrap2: {
+    // height: '250px',
+    marginBottom: '15px',
+    maxHeight: '220px',
+    overflowY: 'scroll'
   }
 }
