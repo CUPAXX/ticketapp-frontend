@@ -1,18 +1,32 @@
-import React, { useState } from 'react'
+
+import React, { useState, useEffect } from 'react'
 import { Container, Navbar, Nav, NavDropdown, Image, Form, Button, FormControl } from 'react-bootstrap';
 import icon from '../assets/icon.png';
 import { AiOutlineMail, BsBell, FaSearchLocation } from 'react-icons/all';
-import { useLocation, Link, useHistory } from 'react-router-dom'
+import { connect, useDispatch, useSelector } from 'react-redux'
 import headerImg from '../assets/headerImg.png'
-import { connect, useDispatch } from 'react-redux';
+import { getUser } from '../redux/action/user'
+import imgUser from '../assets/user.png'
+
+import { useLocation, Link, useHistory } from 'react-router-dom'
 import { getTickets } from '../redux/action/ticket'
+
+const { REACT_APP_BACKEND_URL: URL } = process.env
 
 function Header (props) {
   const [search, setSearch] = useState('')
   const location = useLocation();
-  const dispatch = useDispatch()
   const history = useHistory()
   console.log(location.pathname);
+
+  const { dataUser } = useSelector(state => state.user);
+
+  const { token } = useSelector(state => state.auth);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getUser(token));
+  }, [token]);
 
   const onSearch = (e) => {
     e.preventDefault()
@@ -24,6 +38,7 @@ function Header (props) {
     dispatch(getTickets(form))
     history.push('/search')
   }
+
   return (
     <React.Fragment>
       {location.pathname !== '/signup' && location.pathname !== '/forgot' && location.pathname !== '/login'
@@ -69,7 +84,11 @@ function Header (props) {
                 </Link>
 
                 <Link to="/profile">
-                  <Image style={{ width: '50px', height: '50px' }} src={headerImg} />
+                  {dataUser.picture !== null
+                    ? <Image className="rounded-circle" style={{ width: '50px', height: '50px' }} src={`${URL}${dataUser.picture}`} />
+                    : <Image className="rounded-circle" style={{ width: '50px', height: '50px' }} src={imgUser} />
+                  }
+
                 </Link>
               </Nav>
               )}
@@ -88,10 +107,11 @@ function Header (props) {
 }
 
 const mapStateToProps = state => ({
-  auth: state.auth
+  auth: state.auth,
+  user: state.user
 })
 
-const mapDispatchToProps = { }
+const mapDispatchToProps = { getUser }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header)
 

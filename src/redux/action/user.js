@@ -45,7 +45,6 @@ export const updateProfile = (data, token) => {
         dispatch({ type: 'USER_RESET' });
       }, 3000);
     } catch (err) {
-      console.log(err.response)
       dispatch({
         type: 'UPDATE_USER_FAILED',
         payload: err.response.data.message

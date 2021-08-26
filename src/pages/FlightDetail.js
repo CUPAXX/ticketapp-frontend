@@ -47,15 +47,6 @@ const FlightDetail = (props) => {
     }
   }, [book])
 
-  // useEffect(() => {
-  //   if (props.location.state.length < 1) {
-  //     history.push('/search')
-  //     console.log(true)
-  //   } else {
-  //     console.log(false)
-  //   }
-  // }, [history, ticketDetail])
-
   return ticketDetail !== undefined
     ? (
       <div style={styleCoba.warpAll}>

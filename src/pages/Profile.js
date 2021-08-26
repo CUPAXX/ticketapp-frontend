@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux';
 import Swal from 'sweetalert2'
 import { getUser, updateProfile } from '../redux/action/user'
+import { authLogout } from '../redux/action/auth'
 const { REACT_APP_BACKEND_URL: URL } = process.env
 
 class Profile extends Component {
@@ -32,8 +33,7 @@ class Profile extends Component {
   data = (e) => {
     e.preventDefault()
     const { token } = this.props.auth
-    const { fullname, email, phone_number, city, postcode, address } = this.state.dataUser
-    const { showImage: picture } = this.state
+    const { fullname, email, phone_number, city, postcode, address, picture } = this.state.dataUser
     const data = {
       fullname,
       email,
@@ -43,9 +43,49 @@ class Profile extends Component {
       picture,
       postcode
     }
-    this.props.updateProfile(data, token).then(() => {
-      this.props.history.push('/')
-      this.props.history.replace('/profile')
+    console.log(data)
+    this.props.updateProfile(data, token)
+    // if (this.props.user.errMsg === '') {
+    //   Swal.fire({
+    //     position: 'top-end',
+    //     icon: 'success',
+    //     title: 'Login Success',
+    //     showConfirmButton: false,
+    //     timer: 1500
+    //   })
+    //   this.props.history.push('/')
+    //   this.props.history.replace('/profile')
+    // } else {
+    //   Swal.fire({
+    //     position: 'top-end',
+    //     icon: 'error',
+    //     title: `${this.props.user.errMsg}`,
+    //     showConfirmButton: false,
+    //     timer: 1500
+    //   })
+    // }
+  }
+
+  onLogout= (e) => {
+    e.preventDefault()
+    Swal.fire({
+      title: 'Are you sure want to logout?',
+      text: 'You will be logout!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, logout!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire(
+          'Logout!',
+          'Your has been logout.',
+          'success'
+        )
+        this.props.authLogout()
+        this.props.history.push('/');
+      }
     })
   }
 
@@ -62,7 +102,12 @@ class Profile extends Component {
               : (
               <Image className="rounded-circle" style={{ width: '130px', height: '130px' }} src={profilePic} />
                 )}
-            <input type="file" onChange={e => this.setState({ showImage: e.target.files[0] })} className="d-none" id="file-upload"/>
+            <input type="file" onChange={e => this.setState(prevState => ({
+              dataUser: {
+                ...prevState.dataUser,
+                picture: e.target.files[0]
+              }
+            }))} className="d-none" id="file-upload"/>
               <label style={styleCoba.btnLeft} htmlFor="file-upload" >Select Photo</label>
             <h5 className="fw-bold py-2">{this.state.dataUser.fullname}</h5>
             {this.state.dataUser.address !== null && this.state.dataUser.address !== ''
@@ -90,7 +135,7 @@ class Profile extends Component {
                 <BsGearFill size={20} />
                 <p className="fw-bold">Settings</p>
               </div>
-              <div className="d-flex flex-row align-items-center gap-4">
+              <div style={{ cursor: 'pointer' }} onClick={(e) => this.onLogout(e)} className="d-flex flex-row align-items-center gap-4">
                 <FiLogOut size={20} className="text-danger" />
                 <p className="fw-bold text-danger">Logout</p>
               </div>
@@ -211,7 +256,9 @@ const mapStateToProps = state => ({
   auth: state.auth,
   user: state.user
 })
-const mapDispatchToProps = { getUser, updateProfile }
+const mapDispatchToProps = {
+  getUser, updateProfile, authLogout
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile)
 
