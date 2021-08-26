@@ -84,7 +84,7 @@ export default class FlightDetail extends Component {
                 Get travel compensation up to $ 10.000,00
               </div>
             </div>
-
+            <Button style={styleCoba.btnBook}>BOOK FLIGHT</Button>
           </div>
           <div className="d-flex flex-column gap-3">
             <div className="d-flex flex-row justify-content-between">

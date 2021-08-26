@@ -1,40 +1,48 @@
 const initialState = {
-  dataUser: {},
+  dataTicket: [],
+  dataDetailTicket: {},
   errMsg: '',
   succMsg: ''
 }
 
-const user = (state = initialState, action) => {
+const ticket = (state = initialState, action) => {
   switch (action.type) {
-    case 'GET_USER': {
+    case 'GET_TICKET': {
       return {
         ...state,
-        dataUser: action.payload,
+        dataTicket: action.payload,
         errMsg: ''
       }
     }
-    case 'GET_USER_FAILED': {
+    case 'GET_TICKET_FAILED': {
       return {
         ...state,
         errMsg: action.payload,
         succMsg: ''
       }
     }
-    case 'USER_RESET': {
+    case 'GET_DETAIL_TICKET': {
       return {
         ...state,
-        errMsg: '',
+        dataDetailTicket: action.payload,
+        errMsg: ''
+      }
+    }
+    case 'GET_DETAIL_TICKET_FAILED': {
+      return {
+        ...state,
+        errMsg: action.payload,
         succMsg: ''
       }
     }
-    case 'UPDATE_USER': {
+    case 'PAY_TICKET': {
       return {
         ...state,
         succMsg: action.payload,
         errMsg: ''
       }
     }
-    case 'UPDATE_USER_FAILED': {
+    case 'PAY_TICKET_FAILED': {
       return {
         ...state,
         errMsg: action.payload,
@@ -49,4 +57,4 @@ const user = (state = initialState, action) => {
   }
 }
 
-export default user
+export default ticket
