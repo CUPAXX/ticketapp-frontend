@@ -80,7 +80,7 @@ const Chat = (props) => {
       </div>
   )
 }
-
+console.log('baru')
 const mapStateToProps = (state) => ({
   auth: state.auth,
   user: state.user,
