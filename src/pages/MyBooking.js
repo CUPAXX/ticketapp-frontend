@@ -4,7 +4,7 @@ import ItemBooking from '../components/ItemBooking'
 import profilePic from '../assets/imgProfile.png'
 import cardAtm from '../assets/cardAtm.png'
 import { BsStarFill, BsGearFill, FiLogOut, FaUserCircle, FaPlaneDeparture, BiChevronDown } from 'react-icons/all'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux';
 import Swal from 'sweetalert2'
 import { getUser } from '../redux/action/user'
@@ -165,7 +165,7 @@ const mapDispatchToProps = {
   getUser, getTicket, authLogout, payTicket
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(MyBooking)
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(MyBooking))
 
 const styleCoba = {
   warpAll: {
