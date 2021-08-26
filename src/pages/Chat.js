@@ -14,11 +14,10 @@ import { Link } from 'react-router-dom'
 const { REACT_APP_BACKEND_URL: URL } = process.env
 
 const Chat = (props) => {
-  const { ListChat } = props.chat;
   const socket = io(`${URL}`);
 
   const { dataUser } = useSelector(state => state.user);
-  // const { details } = useSelector(state => state.chat);
+  const { ListChat } = useSelector(state => state.chat);
   const { token } = useSelector(state => state.auth);
   const dispatch = useDispatch();
 
@@ -80,16 +79,8 @@ const Chat = (props) => {
       </div>
   )
 }
-console.log('baru')
-const mapStateToProps = (state) => ({
-  auth: state.auth,
-  user: state.user,
-  chat: state.chat
-})
 
-const mapDispatchToProps = { getUser, chatList }
-
-export default connect(mapStateToProps, mapDispatchToProps)(Chat)
+export default Chat
 
 const styleCoba = {
   input: {
