@@ -65,7 +65,14 @@ const ChatRoom = (props) => {
     const form = {
       message: message
     }
-    props.sendChat(token, id, form)
+    props.sendChat(token, id, form).then(() => {
+      props.chatRoom(token, id);
+      setChatData({
+        ...chatData,
+        message: '',
+        attachment: ''
+      });
+    });
     setMessage('')
   }
 
@@ -108,6 +115,12 @@ const ChatRoom = (props) => {
       Send
     </Button>
   </InputGroup>
+  <input
+      type="file"
+      className="custom-file-input"
+      id="inputGroupFile01"
+      aria-describedby="inputGroupFileAddon01"
+    />
   </form>
 
         {/* <ChatBubbleLeft />
