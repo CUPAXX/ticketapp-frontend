@@ -1,7 +1,10 @@
 const initialState = {
   dataUser: {},
   errMsg: '',
-  succMsg: ''
+  succMsg: '',
+  searchData: [],
+  pageInfo: [],
+  searchErr: ''
 }
 
 const user = (state = initialState, action) => {
@@ -41,6 +44,33 @@ const user = (state = initialState, action) => {
         succMsg: ''
       }
     }
+    case 'SEARCH_USER': {
+      return {
+        ...state,
+        searchData: action.payload
+      };
+    }
+    // case 'SEARCH_USER_NEXT': {
+    //   return {
+    //     ...state,
+    //     search: [...state.search, ...action.payload.user],
+    //     pageInfo: action.payload.pageInfo
+    //   };
+    // }
+    // case 'SEARCH_USER_REJECTED': {
+    //   return {
+    //     ...state,
+    //     searchErr: action.error
+    //   };
+    // }
+    // case 'SEARCH_DEFAULT': {
+    //   return {
+    //     ...state,
+    //     search: [],
+    //     pageInfo: [],
+    //     searchErr: ''
+    //   };
+    // }
     default: {
       return {
         ...state

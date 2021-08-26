@@ -8,7 +8,7 @@ import ItemChat from '../components/ChatItemList'
 import { chatList } from '../redux/action/chat'
 import { connect, useDispatch, useSelector } from 'react-redux'
 import { io } from 'socket.io-client';
-import { getUser } from '../redux/action/user'
+import { getUser, searchUser, searchDefault } from '../redux/action/user'
 import { Link } from 'react-router-dom'
 
 const { REACT_APP_BACKEND_URL: URL } = process.env
@@ -20,6 +20,26 @@ const Chat = (props) => {
   const { ListChat } = useSelector(state => state.chat);
   const { token } = useSelector(state => state.auth);
   const dispatch = useDispatch();
+  const { searchData } = useSelector(state => state.user)
+
+  const [search, setSearch] = useState('')
+
+  const onSearch = (e) => {
+    if (e.key === 'Enter') {
+      console.log(search)
+      searchUser(token, search)
+    }
+  }
+
+  useEffect(() => {
+    dispatch(
+      searchUser(
+        token,
+        search
+
+      )
+    );
+  }, [token, search]);
 
   useEffect(() => {
     dispatch(chatList(token));
@@ -38,9 +58,22 @@ const Chat = (props) => {
             <p className="fw-bold" style={{ color: '#7ECFC0', fontSize: '13px' }}>Filter</p>
           </div>
 
-          {ListChat.map(chat => {
-            return chat.user.id !== dataUser.id
-              ? <ItemChat
+    <form >
+        <InputGroup className="mb-3">
+
+    <FormControl
+      value={search}
+      onChange={(e) => setSearch(e.target.value)}
+      placeholder="Search User"
+      aria-label="Recipient's username"
+      aria-describedby="basic-addon2"
+    />
+  </InputGroup>
+  </form>
+{search.length <= 0
+  ? ListChat.map(chat => {
+    return chat.user.id !== dataUser.id
+      ? <ItemChat
             img={`${URL}${chat.user.picture}`}
             to={`/chatroom/${chat.user.id}`}
             key={chat.id}
@@ -48,7 +81,7 @@ const Chat = (props) => {
             message={chat.message}
             time={chat.createdAt.slice(11, 16)}
             />
-              : <ItemChat
+      : <ItemChat
               img={`${URL}${dataUser.picture}`}
               to={`/chatroom/${chat.sender}`}
               key={chat.id}
@@ -56,7 +89,17 @@ const Chat = (props) => {
               message={chat.message}
               time={chat.createdAt.slice(11, 16)}
               />
-          })}
+  })
+
+  : searchData.map(res => {
+    return <ItemChat
+    img={`${URL}${res.picture}`}
+    to={`/chatroom/${res.id}`}
+    key={res.id}
+    fullname={res.fullname}
+    />
+  })
+  }
 
         </div>
 
@@ -82,7 +125,15 @@ const Chat = (props) => {
   )
 }
 
-export default Chat
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+  user: state.user,
+  chat: state.chat
+})
+
+const mapDispatchToProps = { getUser, searchUser, searchDefault, chatList }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Chat)
 
 const styleCoba = {
   input: {

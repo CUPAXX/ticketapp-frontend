@@ -55,3 +55,55 @@ export const updateProfile = (data, token) => {
     }
   }
 }
+
+export const searchUser = (token, search) => {
+  return async (dispatch) => {
+    const { data } = await http(token).get(`${URL}/users?search=${search}`)
+    dispatch({
+      type: 'SEARCH_USER',
+      payload: data.pageInfo.totalData.rows
+    })
+  }
+}
+
+// export const searchUser =
+//   (token, value, sortBy, sort, page) => async dispatch => {
+//     console.log(page, 'search action123');
+//     try {
+//       if (page > 1) {
+//         const { data } = await http(token).get(
+//           `${URL}/users?search=${value}&sort[${sortBy}]=${sort}&page=${page}`
+//         );
+//         console.log(data, 'action 123 123');
+//         dispatch({
+//           type: 'SEARCH_USER_NEXT',
+//           payload: {
+//             user:
+//             pageInfo: data.pageInfo
+//           }
+//         });
+//       } else {
+//         const { data } = await http(token).get(
+//           `${URL}/users?search=${value}&sort[${sortBy}]=${sort}`
+//         );
+//         dispatch({
+//           type: 'SEARCH_USER',
+//           payload: {
+//             user: data.pageInfo.totalData.rows,
+//             pageInfo: data.pageInfo
+//           }
+//         });
+//       }
+//     } catch (err) {
+//       dispatch({
+//         type: 'SEARCH_USER_REJECTED',
+//         error: err.response.data.data
+//       });
+//     }
+//   };
+
+export const searchDefault = () => dispatch => {
+  dispatch({
+    type: 'SEARCH_DEFAULT'
+  });
+};
