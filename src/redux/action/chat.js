@@ -44,3 +44,22 @@ export const sendChat = (token, id, setData) => async dispatch => {
     console.log(err);
   }
 };
+
+export const deleteChat = (token, id, chatId) => async dispatch => {
+  const form = new URLSearchParams();
+  form.append('chatId', chatId);
+  try {
+    const { data } = await http(token).delete(`${URL}/chats/delete/${id}`, {
+      data: form
+    });
+    console.log(data, 'action data123');
+    dispatch({
+      type: 'DELETE_CHAT',
+      payload: data.data
+    });
+    dispatch(chatList(token));
+    dispatch(chatRoom(token, id));
+  } catch (err) {
+    console.log(err);
+  }
+};

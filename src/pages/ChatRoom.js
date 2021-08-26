@@ -6,11 +6,12 @@ import qr from '../assets/qr.png'
 import imgChat from '../assets/imgChat.png'
 import ChatBubbleLeft from '../components/ChatBubbleLeft'
 import ChatBubbleRight from '../components/ChatBubbleRight'
-import { chatRoom, sendChat } from '../redux/action/chat'
+import { chatRoom, sendChat, deleteChat } from '../redux/action/chat'
 import { connect, useDispatch, useSelector } from 'react-redux'
 import { io } from 'socket.io-client';
 import { getUser } from '../redux/action/user'
 import { useParams } from 'react-router-dom';
+import Swal from 'sweetalert2'
 
 const { REACT_APP_BACKEND_URL: URL } = process.env
 
@@ -76,6 +77,32 @@ const ChatRoom = (props) => {
     setMessage('')
   }
 
+  const onDelete = chat => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'You won\'t be able to revert this!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const form = {
+          id: chat.sender !== dataUser?.id ? chat.sender : chat.recipient,
+          chatId: chat.id
+        };
+        console.log('hapus', form.id, form.chatId)
+        props.deleteChat(token, form.id, form.chatId)
+        Swal.fire(
+          'Deleted!',
+          'chat has been deleted.',
+          'success'
+        )
+      }
+    })
+  }
+
   return (
       <div style={{ backgroundColor: '#7ECFC0' }} className="py-4 d-flex justify-content-center">
       <div style={{ borderRadius: '15px', padding: '3em' }} className="bg-white d-md-flex d-none flex-column w-50">
@@ -84,14 +111,18 @@ const ChatRoom = (props) => {
         {RoomChat.map(chat => {
           return chat.sender !== dataUser.id
             ? <ChatBubbleLeft
+            on={() => onDelete(chat)}
             key={chat.id}
+            time={chat.createdAt.slice(11, 16)}
             // img={`${URL}${dataUser.picture}`}
             message={chat.message}
             />
             : <ChatBubbleRight
 
+              on={() => onDelete(chat)}
               key={chat.id}
               img={`${URL}${dataUser.picture}`}
+              time={chat.createdAt.slice(11, 16)}
               message={chat.message}
               />
         })}
@@ -137,7 +168,7 @@ const mapStateToProps = (state) => ({
   chat: state.chat
 })
 
-const mapDispatchToProps = { getUser, chatRoom, sendChat }
+const mapDispatchToProps = { getUser, chatRoom, sendChat, deleteChat }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatRoom)
 

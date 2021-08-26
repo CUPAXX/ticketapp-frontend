@@ -46,6 +46,7 @@ const Chat = (props) => {
             key={chat.id}
             fullname={chat.user.fullname}
             message={chat.message}
+            time={chat.createdAt.slice(11, 16)}
             />
               : <ItemChat
               img={`${URL}${dataUser.picture}`}
@@ -53,6 +54,7 @@ const Chat = (props) => {
               key={chat.id}
               fullname={dataUser.fullname}
               message={chat.message}
+              time={chat.createdAt.slice(11, 16)}
               />
           })}
 
