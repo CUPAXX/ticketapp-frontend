@@ -1,23 +1,25 @@
 import React, { useEffect, useState } from 'react'
 import { Image, InputGroup, FormControl, Form, DropdownButton, Dropdown, Button, Modal, Spinner } from 'react-bootstrap'
+import { PropTypes } from 'prop-types'
 import { BsDot } from 'react-icons/bs'
 import { FaPlaneDeparture, BiCheckCircle, DiVisualstudio, FiChevronDown, AiFillWarning, AiFillStar, FaHamburger, TiWiFi, ImManWoman } from 'react-icons/all'
 import airlineIcon from '../assets/airlineIcon.png'
-import { useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useHistory, useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { addToBooking } from '../redux/action/ticket'
 import NoFlightDetail from '../components/NoFlightDetail'
 
 const { REACT_APP_BACKEND_URL: URL } = process.env
 
 const FlightDetail = (props) => {
-  const ticketDetail = props.location.state
+  const ticketDetail = useLocation()
+  // const { token } = useSelector(state => state.auth)
   const dispatch = useDispatch();
   const history = useHistory();
 
   const transaction = {
     total_amount: 1,
-    id_ticket: ticketDetail?.id
+    id_ticket: ticketDetail.id
   }
 
   const [modalParent, setModalParent] = useState(false);
@@ -31,6 +33,8 @@ const FlightDetail = (props) => {
     setModal(false);
     setBook(true);
   };
+
+  console.log(ticketDetail, 'test 1234')
 
   const showModalParent = () => {
     setModalParent(true)
@@ -47,7 +51,7 @@ const FlightDetail = (props) => {
     }
   }, [book])
 
-  return ticketDetail !== undefined
+  return ticketDetail.state !== undefined
     ? (
       <div style={styleCoba.warpAll}>
         <div className="parentDetail "/>
@@ -57,9 +61,6 @@ const FlightDetail = (props) => {
               </div>
               {modal && (
                 <Modal.Dialog>
-                  <Modal.Header>
-                    <Modal.Title>Modal title</Modal.Title>
-                  </Modal.Header>
 
                   <Modal.Body>
                     <p>Add to booking list ?</p>
@@ -161,24 +162,24 @@ const FlightDetail = (props) => {
             <div className="parentRightDetail d-flex flex-column ">
               <div className="d-flex flex-column w-75 gap-3">
                 <div className="d-flex flex-row align-items-center">
-                  {ticketDetail.airline.picture !== null
+                  {ticketDetail.state.airline.picture !== null
                     ? (
-                    <Image className="me-4" src={`${URL}${ticketDetail.airline.picture}`} />
+                    <Image className="me-4" src={`${URL}${ticketDetail.state.airline.picture}`} />
                       )
                     : (
                   <Image className="me-4" src={airlineIcon} />
                       )}
-                  <h6>{`${ticketDetail.airline.name}`}</h6>
+                  <h6>{`${ticketDetail.state.airline.name}`}</h6>
                 </div>
                 <div className="d-flex flex-row justify-content-between">
-                  <h4>{`${ticketDetail.departure}`} {`${ticketDetail.code_departure}`}</h4>
+                  <h4>{`${ticketDetail.state.departure}`} {`${ticketDetail.state.code_departure}`}</h4>
                   <FaPlaneDeparture />
-                  <h4>{`${ticketDetail.destination}`} {`${ticketDetail.code_destination}`}</h4>
+                  <h4>{`${ticketDetail.state.destination}`} {`${ticketDetail.state.code_destination}`}</h4>
                 </div>
                 <div className="d-flex flex-row gap-2">
                   <h5>Sunday, 15 August 2020</h5>
                   <BsDot />
-                  <h5>{`${ticketDetail.departure_time}`} - {`${ticketDetail.arrival_time}`}</h5>
+                  <h5>{`${ticketDetail.state.departure_time}`} - {`${ticketDetail.state.arrival_time}`}</h5>
                 </div>
                 <div className="d-flex flex-column gap-2 pb-3">
                   <div className="d-flex flex-row align-items-center">
@@ -194,7 +195,7 @@ const FlightDetail = (props) => {
               <div className="d-flex flex-row align-items-center justify-content-between pt-3 border-top">
                 <h5 className=" fs-6">Total Payment</h5>
                 <div className="d-flex flex-row align-items-center">
-                  <h4 style={{ color: '#7ECFC0' }}>$ {`${ticketDetail.price}`}</h4>
+                  <h4 style={{ color: '#7ECFC0' }}>$ {`${ticketDetail.state.price}`}</h4>
                   <FiChevronDown color="#7ECFC0" size={20}/>
                 </div>
               </div>
@@ -210,9 +211,9 @@ const FlightDetail = (props) => {
             <div className="parentRightDetailSec d-flex flex-column ">
             <div className="d-flex flex-column gap-4">
                 <div className="d-flex flex-row justify-content-between">
-                  <h4>{`${ticketDetail.departure}`} {`${ticketDetail.code_departure}`}</h4>
+                  <h4>{`${ticketDetail.state.departure}`} {`${ticketDetail.state.code_departure}`}</h4>
                   <FaPlaneDeparture />
-                  <h4>{`${ticketDetail.destination}`} {`${ticketDetail.code_destination}`}</h4>
+                  <h4>{`${ticketDetail.state.destination}`} {`${ticketDetail.state.code_destination}`}</h4>
                 </div>
                 <div className="d-flex flex-row align-items-center justify-content-between">
                   <Image className="me-4" src={airlineIcon} fluid/>
@@ -230,19 +231,19 @@ const FlightDetail = (props) => {
                 <div className="d-flex flex-row justify-content-between">
                   <div>
                     <p>Code</p>
-                    <h6>{`${ticketDetail.seat}`}</h6>
+                    <h6>{`${ticketDetail.state.seat}`}</h6>
                   </div>
                   <div>
                     <p>Class</p>
-                    <h6>{`${ticketDetail.class}`}</h6>
+                    <h6>{`${ticketDetail.state.class}`}</h6>
                   </div>
                   <div>
                     <p>Terminal</p>
-                    <h6>{`${ticketDetail.terminal}`}</h6>
+                    <h6>{`${ticketDetail.state.terminal}`}</h6>
                   </div>
                   <div>
                     <p>Gate</p>
-                    <h6>{`${ticketDetail.gate}`}</h6>
+                    <h6>{`${ticketDetail.state.gate}`}</h6>
                   </div>
                 </div>
               </div>
@@ -264,7 +265,7 @@ const FlightDetail = (props) => {
             </div>
             <div className="d-flex flex-row justify-content-between align-items-center mt-3">
               <p>Total you’ll pay</p>
-              <h5 style={{ color: '#7ECFC0' }}>$ {`${ticketDetail.price}`}</h5>
+              <h5 style={{ color: '#7ECFC0' }}>$ {`${ticketDetail.state.price}`}</h5>
             </div>
             <Button onClick={() => showModalParent()} style={styleCoba.btnBook}>BOOK FLIGHT</Button>
           </div>
@@ -355,6 +356,16 @@ const styleCoba = {
     borderRadius: '10px',
     marginBottom: '2em'
   }
+}
+
+FlightDetail.defaultProps = ({
+  saveForDetail: [],
+  ticketDetail: []
+})
+
+FlightDetail.propTypes = {
+  saveForDetail: PropTypes.node,
+  ticketDetail: PropTypes.node
 }
 
 export default FlightDetail
