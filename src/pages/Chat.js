@@ -9,7 +9,7 @@ import { chatList } from '../redux/action/chat'
 import { connect, useDispatch, useSelector } from 'react-redux'
 import { io } from 'socket.io-client';
 import { getUser, searchUser, searchDefault } from '../redux/action/user'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 
 const { REACT_APP_BACKEND_URL: URL } = process.env
 
@@ -137,7 +137,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = { getUser, searchUser, searchDefault, chatList }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Chat)
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Chat))
 
 const styleCoba = {
   input: {

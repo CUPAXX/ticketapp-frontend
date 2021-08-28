@@ -160,11 +160,11 @@ const FlightDetail = () => {
               <h5 style={{ color: 'white' }}>View Details</h5>
             </div>
             <div className="parentRightDetail d-flex flex-column ">
-              <div className="d-flex flex-column w-75 gap-3">
+              <div className="d-flex flex-column w-100 gap-3">
                 <div className="d-flex flex-row align-items-center">
                   {ticketDetail.state.airline.picture !== null
                     ? (
-                    <Image className="me-4" src={`${URL}${ticketDetail.state.airline.picture}`} />
+                    <Image style={{ maxWidth: '50px', maxHeight: '50px' }} className="me-4" src={`${URL}${ticketDetail.state.airline.picture}`} />
                       )
                     : (
                   <Image className="me-4" src={airlineIcon} />
@@ -172,14 +172,14 @@ const FlightDetail = () => {
                   <h6>{`${ticketDetail.state.airline.name}`}</h6>
                 </div>
                 <div className="d-flex flex-row justify-content-between">
-                  <h4>{`${ticketDetail.state.departure}`} {`${ticketDetail.state.code_departure}`}</h4>
+                  <h4>{`${ticketDetail.state.departure}`} ({`${ticketDetail.state.code_departure}`})</h4>
                   <FaPlaneDeparture />
-                  <h4>{`${ticketDetail.state.destination}`} {`${ticketDetail.state.code_destination}`}</h4>
+                  <h4>{`${ticketDetail.state.destination}`} ({`${ticketDetail.state.code_destination}`})</h4>
                 </div>
-                <div className="d-flex flex-row gap-2">
-                  <h5>Sunday, 15 August 2020</h5>
+                <div className="d-flex flex-row gap-1">
+                  <h5 style={{ fontSize: '10px' }}>{ticketDetail.state.departure_time}</h5>
                   <BsDot />
-                  <h5>{`${ticketDetail.state.departure_time}`} - {`${ticketDetail.state.arrival_time}`}</h5>
+                  <h5 style={{ fontSize: '10px' }}>{ticketDetail.state.arrival_time}</h5>
                 </div>
                 <div className="d-flex flex-column gap-2 pb-3">
                   <div className="d-flex flex-row align-items-center">
@@ -210,13 +210,19 @@ const FlightDetail = () => {
             </div>
             <div className="parentRightDetailSec d-flex flex-column ">
             <div className="d-flex flex-column gap-4">
-                <div className="d-flex flex-row justify-content-between">
-                  <h4>{`${ticketDetail.state.departure}`} {`${ticketDetail.state.code_departure}`}</h4>
+                <div className="d-flex flex-row justify-content-between align-items-center">
+                  <h4>{`${ticketDetail.state.departure}`} ({`${ticketDetail.state.code_departure}`})</h4>
                   <FaPlaneDeparture />
-                  <h4>{`${ticketDetail.state.destination}`} {`${ticketDetail.state.code_destination}`}</h4>
+                  <h4>{`${ticketDetail.state.destination}`} ({`${ticketDetail.state.code_destination}`})</h4>
                 </div>
                 <div className="d-flex flex-row align-items-center justify-content-between">
-                  <Image className="me-4" src={airlineIcon} fluid/>
+                {ticketDetail.state.airline.picture !== null
+                  ? (
+                    <Image style={{ maxWidth: '50px', maxHeight: '50px' }} className="me-4" src={`${URL}${ticketDetail.state.airline.picture}`} />
+                    )
+                  : (
+                  <Image className="me-4" src={airlineIcon} />
+                    )}
                   <div className="d-flex flex-column justify-content-center align-items-center">
                     <div className="d-flex flex-row gap-1">
                       <AiFillStar color="#FF7F23" />

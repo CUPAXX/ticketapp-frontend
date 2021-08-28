@@ -16,9 +16,9 @@ const ChatItemList = ({ fullname, message, img, to, time }) => {
 
                 {/* // } */}
                 <Image style={styleCoba.img} src={imgUser}/>
-                <div className="d-flex flex-column">
-                  <h6>{fullname}</h6>
-                  <p>{message}</p>
+                <div style={{ maxWidth: '380px' }} className="d-flex flex-column">
+                  <h6 className="pb-2 fw-bold fs-4">{fullname}</h6>
+                  <p style={{ wordWrap: 'break-word' }}>{message}</p>
                 </div>
               </div>
               <div className="d-flex flex-column gap-2">

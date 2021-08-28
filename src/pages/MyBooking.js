@@ -10,6 +10,7 @@ import Swal from 'sweetalert2'
 import { getUser } from '../redux/action/user'
 import { getTicket, payTicket } from '../redux/action/ticket'
 import { authLogout } from '../redux/action/auth'
+import { createNotif } from '../redux/action/notification'
 const { REACT_APP_BACKEND_URL: URL } = process.env
 
 class MyBooking extends Component {
@@ -57,7 +58,7 @@ class MyBooking extends Component {
   }
 
   onPay = (id) => {
-    console.log('coba', id)
+    const dataNotif = { label: 'Booking Payment Success', message: 'You can see ticket / booking detail in page booking detail dont forgot to screenshot or save your booking detail' }
     Swal.fire({
       title: 'Are you sure want to pay?',
       text: 'You will pay this booking!',
@@ -75,9 +76,10 @@ class MyBooking extends Component {
             'Success Pay this booking',
             'success'
           )
+          this.props.createNotif(token, dataNotif)
+          this.props.history.push('/')
+          this.props.history.replace('/mybooking')
         })
-        this.props.history.push('/')
-        this.props.history.replace('/mybooking')
       }
     })
   }
@@ -96,7 +98,7 @@ class MyBooking extends Component {
             : (
               <Image className="rounded-circle" style={{ width: '130px', height: '130px' }} src={profilePic} />
               )}
-            <h5 className="fw-bold py-2 mt-3">Mike Kowalski</h5>
+            <h5 className="fw-bold py-2 mt-3">{dataUser.fullname}</h5>
             <p>Medan, Indonesia</p>
             <div className="d-flex flex-row justify-content-between w-100 pt-4">
               <p className="fw-bold">Cards</p>
@@ -162,10 +164,10 @@ const mapStateToProps = state => ({
   ticket: state.ticket
 })
 const mapDispatchToProps = {
-  getUser, getTicket, authLogout, payTicket
+  getUser, getTicket, authLogout, payTicket, createNotif
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(MyBooking))
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(MyBooking))
 
 const styleCoba = {
   warpAll: {
