@@ -6,6 +6,7 @@ import qr from '../assets/qr.png'
 import { connect } from 'react-redux';
 import Swal from 'sweetalert2'
 import { getDetailTicket } from '../redux/action/ticket'
+import { withRouter } from 'react-router-dom'
 const { REACT_APP_BACKEND_URL: URL } = process.env
 
 class BookingDetail extends Component {
@@ -123,4 +124,4 @@ const mapDispatchToProps = {
   getDetailTicket
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(BookingDetail)
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(BookingDetail))

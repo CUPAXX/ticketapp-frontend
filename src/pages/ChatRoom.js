@@ -12,6 +12,7 @@ import { io } from 'socket.io-client';
 import { getUser } from '../redux/action/user'
 import { useParams } from 'react-router-dom';
 import Swal from 'sweetalert2'
+import imgUser from '../assets/user.png'
 
 const { REACT_APP_BACKEND_URL: URL } = process.env
 
@@ -116,12 +117,13 @@ const ChatRoom = (props) => {
             time={chat.createdAt.slice(11, 16)}
             // img={`${URL}${dataUser.picture}`}
             message={chat.message}
+            img={chat.picture !== null ? `${URL}${chat.picture}` : `${imgUser}`}
             />
             : <ChatBubbleRight
 
               on={() => onDelete(chat)}
               key={chat.id}
-              img={`${URL}${dataUser.picture}`}
+              img={dataUser.picture !== null ? `${URL}${dataUser.picture}` : `${imgUser}`}
               time={chat.createdAt.slice(11, 16)}
               message={chat.message}
               />

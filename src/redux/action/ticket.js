@@ -4,15 +4,16 @@ const { REACT_APP_BACKEND_URL: URL } = process.env
 
 export const getTickets = data => {
   return async dispatch => {
+    dispatch({ type: 'SET_LOADING', payload: true });
     try {
+      dispatch({ type: 'SET_LOADING', payload: false });
       dispatch({ type: 'GET_TICKET', payload: [] });
       const { data: results } = await http().get(
         `${URL}/tickets/tickets?departure=${data.departure}&destination=${data.destination}&searchClass=${data.classTicket}`
       );
       dispatch({ type: 'GET_TICKET', payload: results.results });
     } catch (err) {
-
-      // dispatch({type: 'SET_LOADING', payload: false});
+      dispatch({ type: 'SET_LOADING', payload: false });
     }
   };
 };

@@ -19,10 +19,14 @@ import Notification from './pages/Notification'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import PrivateRoute from './components/PrivateRoute';
-class App extends React.Component {
-  render () {
-    return (
-      <BrowserRouter>
+import Loading from './components/Loading'
+import { useSelector } from 'react-redux'
+
+function App () {
+  const { isLoading } = useSelector(state => state.globalReducer)
+  console.log(isLoading)
+  return (
+    <BrowserRouter>
         <Header />
           <Switch>
             <Route path="/" exact component={Home}/>
@@ -56,9 +60,9 @@ class App extends React.Component {
             <Route path="/notification" component={Notification}/>
           </Switch>
         <Footer />
+        {isLoading && <Loading />}
       </BrowserRouter>
-    )
-  }
+  )
 }
 
 export default App
