@@ -4,7 +4,9 @@ const { REACT_APP_BACKEND_URL: URL } = process.env
 
 export const getUser = (token) => {
   return async (dispatch) => {
+    dispatch({ type: 'SET_LOADING', payload: true });
     try {
+      dispatch({ type: 'SET_LOADING', payload: false });
       const { data } = await http(token).get(`${URL}/users/signed`)
       dispatch({
         type: 'GET_USER',
@@ -14,6 +16,7 @@ export const getUser = (token) => {
         dispatch({ type: 'USER_RESET' });
       }, 3000);
     } catch (err) {
+      dispatch({ type: 'SET_LOADING', payload: false });
       dispatch({
         type: 'GET_USER_FAILED',
         payload: err.response.data.message

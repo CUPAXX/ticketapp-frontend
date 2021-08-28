@@ -6,7 +6,9 @@ export const authLogin = (email, password) => {
     const form = new URLSearchParams()
     form.append('email', email)
     form.append('password', password)
+    dispatch({ type: 'SET_LOADING', payload: true });
     try {
+      dispatch({ type: 'SET_LOADING', payload: false });
       const { data } = await http().post(`${URL}/users/login`, form.toString())
       dispatch({
         type: 'AUTH_LOGIN',
@@ -16,6 +18,7 @@ export const authLogin = (email, password) => {
         dispatch({ type: 'AUTH_RESET' });
       }, 3000);
     } catch (err) {
+      dispatch({ type: 'SET_LOADING', payload: false });
       dispatch({
         type: 'AUTH_LOGIN_FAILED',
         payload: err.response.data.message
@@ -29,11 +32,13 @@ export const authLogin = (email, password) => {
 
 export const authRegister = (email, password, fullname) => {
   return async (dispatch) => {
+    dispatch({ type: 'SET_LOADING', payload: true });
     const from2 = new URLSearchParams()
     from2.append('email', email)
     from2.append('password', password)
     from2.append('fullname', fullname)
     try {
+      dispatch({ type: 'SET_LOADING', payload: false });
       const { data } = await http().post(`${URL}/users/register`, from2.toString())
       dispatch({
         type: 'AUTH_REGISTER',
@@ -43,6 +48,7 @@ export const authRegister = (email, password, fullname) => {
         dispatch({ type: 'AUTH_RESET' });
       }, 3000);
     } catch (err) {
+      dispatch({ type: 'SET_LOADING', payload: false });
       dispatch({
         type: 'AUTH_REGISTER_FAILED',
         payload: err.response.data.message
@@ -54,6 +60,8 @@ export const authRegister = (email, password, fullname) => {
   }
 }
 
-export const authLogout = () => ({
-  type: 'AUTH_LOGOUT'
-})
+export const authLogout = () => {
+  return async dispatch => {
+    dispatch({ type: 'AUTH_LOGOUT' })
+  }
+}
