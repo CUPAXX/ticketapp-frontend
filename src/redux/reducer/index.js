@@ -4,6 +4,7 @@ import user from './user'
 import chat from './chat'
 import ticket from './ticket'
 import globalReducer from './globalReducer'
+import notification from './notification'
 
 import { persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage';
@@ -18,7 +19,8 @@ const reducer = combineReducers({
   user,
   chat,
   ticket,
-  globalReducer
+  globalReducer,
+  notification
 })
 
 export default reducer

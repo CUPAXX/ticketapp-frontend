@@ -1,4 +1,7 @@
+/* eslint-disable no-undef */
 import { http } from '../../helpers/http'
+
+import Swal from 'sweetalert2'
 
 const { REACT_APP_BACKEND_URL: URL } = process.env
 
@@ -36,6 +39,17 @@ export const chatRoom = (token, id) => async dispatch => {
 
 export const sendChat = (token, id, setData) => async dispatch => {
   const form = new FormData()
+  const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer)
+      toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }
+  })
   form.append('message', setData.message);
   // form.append('attachment', {
   //   uri: setData.attachment.uri,
@@ -44,6 +58,7 @@ export const sendChat = (token, id, setData) => async dispatch => {
   // });
   console.log(form, 'action form');
   dispatch({ type: 'SET_LOADING', payload: true });
+  form.append('attachment', setData.attachment);
   try {
     dispatch({ type: 'SET_LOADING', payload: false });
     const { data } = await http(token).post(`${URL}/chats/send/${id}`, form);
@@ -51,6 +66,10 @@ export const sendChat = (token, id, setData) => async dispatch => {
       type: 'SEND_CHAT',
       payload: data.data
     });
+    Toast.fire({
+      icon: 'success',
+      title: 'Message Send'
+    })
   } catch (err) {
     dispatch({ type: 'SET_LOADING', payload: false });
     console.log(err);
