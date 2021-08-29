@@ -7,7 +7,7 @@
     <a href="https://github.com/CUPAXX/ticketapp-frontend/pulls">Request Feature</a>
   </p>
 
-![Image Banner](screnshot/home.jpg)
+![Image Banner](screenshot/home.jpg)
 
 ## About The Project
 
