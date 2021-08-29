@@ -1,40 +1,297 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
-.App {
+
+
+.columnRight {
+  padding: 0px 100px;
+}
+.bgHome {
+  background-image: url(assets/bgHome.png);
+  height: 900px;
+  background-size: cover;
+}
+
+.parentText {
+  padding-top: 100px;
+  padding-bottom: 40px;
+  padding-left : 7em;
+}
+
+.textHome {
+  font-weight: bold;
+  font-size: 3.5em;
+  padding-bottom: 15px;
+}
+.subText {
+  font-size: 20px;
+  color: #969696;
+}
+.parentGalery {
+  padding: 0px 7em;
+  margin-bottom: 6em;
+}
+.galeryParent {
+  max-width: 100%;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 16px;
+  height: 16px;
+  display: none;
+  
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  border-radius: 100vh;
+  background: #EEEEEE;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #BD4B4B;
+  border-radius: 100vh;
+  border: 3px solid #EEEEEE;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #8D2828;
+}
+
+
+.textTrending {
+  letter-spacing: 5px;
+  color: #7ECFC0;
+  font-size: 15px;
+}
+.textDestination {
+  font-size: 23px;
+  font-weight: bold;
+}
+.textView {
+  color: #7ECFC0;
+  font-size: 15px;
+}
+
+.parentUtama {
+  margin: 0px 7em;
+  margin-bottom: 5em;
+}
+
+.parentSlider {
+  width: 870px;
+  height: 316px;
+}
+.parentInside {
+  width: 100%;
+  height: 450px;
+  background-color: #7ECFC0;
+  border-radius: 20px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+.isiSlider{
+  background-color: #fff;
+}
+.parentBtnHome {
   text-align: center;
+  margin-top: 30px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.parentIconFooter {
+  width: 130px;
+}
+.parentIconTextFooter {
+  width: 270px;
+  font-size: 14px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.textMiniFooter {
+  font-size: 14px;
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.parentUtamaFooter {
+  margin: 0px 7em;
+  justify-content: center;
   display: flex;
   flex-direction: column;
-  align-items: center;
+}
+.parentInsideFooter {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.parentSearchResult {
+  background-color: #7ECFC0;
+  width: 100%;
+  height: 176px;
+  border-radius: 0px 0px 20px 30px;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  padding: 0em 7em;
+  color: #fff;
 }
 
-.App-link {
-  color: #61dafb;
+.accordion-button:focus {
+  box-shadow: none !important;
+}
+.accordion {
+  border-radius: 20px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.h1, .h2, .h3, .h4, .h5, .h6, .p, h1, h2, h3, h4, h5, h6, p {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
 }
+.parentDetail {
+  background-color: #7ECFC0;
+  width: 100%;
+  height: 176px;
+  border-radius: 0px 0px 20px 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0em 7em;
+  color: #fff;
+}
+.parentRightDetail {
+  background-color: white;
+  border-radius: 10px;
+  padding: 2em;
+  width: 360px;
+}
+.parentRightDetailSec {
+  background-color: white;
+  border-radius: 10px;
+  padding: 2em;
+  width: 100%;
+}
+.parentRightDetail h4 {
+  font-size: 18px;
+}
+.parentRightDetail h5 {
+  font-size: 11px;
+}
+.parentRightDetail p {
+  color: #7ECFC0;
+  font-size: 13px;
+  padding-left: 10px;
+}
+
+.parentLeftDetail {
+  background-color: white;
+  width: 100%;
+  border-radius: 10px;
+  padding: 25px 35px;
+}
+.parentNotif {
+  border-radius: 15px;
+  padding: 3em;
+  width: 50%;
+}
+
+@media only screen and (max-width: 600px) {
+  .columnRight{
+    padding: 0px 40px;
+  }
+  .bgHome {
+    height: 270px;
+    background-position: center;
+  }
+  .parentText {
+    padding-top: 20px;
+    padding-left : 2em;
+  }
+  .textHome {
+    font-weight: bold;
+    font-size: 1.5em;
+    padding-bottom: 5px;
+  }
+  .subText {
+    font-size: 13px;
+  }
+  .galeryParent {
+    max-width: 350px;
+  }
+  .parentGalery {
+    padding: 0px 2em;
+  }
+  .textTrending {
+    letter-spacing: 3px;
+    color: #7ECFC0;
+    font-size: 10px;
+  }
+  .textDestination {
+    font-size: 15px;
+    font-weight: bold;
+  }
+  .textView {
+    color: #7ECFC0;
+    font-size: 10px;
+  }
+  .parentUtama {
+    margin: 0px 2em;
+  }
+  .parentItem {
+    width: 70px;
+  }
+  .parentSlider {
+    width: 270px;
+    height: 150px;
+  }
+  .parentBtnHome {
+    text-align: center;
+    margin-top: 10px;
+  }
+  .parentInside {
+    width: 100%;
+    height: 280px;
+    background-color: #7ECFC0;
+    border-radius: 20px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+  }
+  .slick-slider {
+    height: 80px;
+  }
+  .parentUtamaFooter {
+    margin: 0px 2em;
+  }
+  .parentInsideFooter {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+  .imageFooter {
+    width: 40%;
+  }
+  .parentSearchResult {
+    background-color: #7ECFC0;
+    width: 100%;
+    height: 176px;
+    border-radius: 0px 0px 20px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0em 2em;
+    color: #fff;
+  }
+  .parentSearchResult h6 {
+    font-size: 10px;
+  }
+  .parentSearchResult h5 {
+    font-size: 15px;
+  }
+  .parentNotif {
+    border-radius: 15px;
+    padding: 2em;
+    margin: 2em;
+    width: 100%;
+  }
+  
+}
+
