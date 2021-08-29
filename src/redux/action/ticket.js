@@ -2,17 +2,23 @@ import { http } from '../../helpers/http'
 
 const { REACT_APP_BACKEND_URL: URL } = process.env
 
-export const getTickets = data => {
+export const getTickets = (departure, destination, airline, transit, classTicket, sortBy, sort, page) => {
   return async dispatch => {
     try {
-      dispatch({ type: 'GET_TICKET', payload: [] });
+      // dispatch({ type: 'GET_TICKET', payload: [] });
       const { data: results } = await http().get(
-        `${URL}/tickets/tickets?departure=${data.departure}&destination=${data.destination}&searchClass=${data.classTicket}`
+        `${URL}/tickets/tickets?departure=${departure}&destination=${destination}&airline=${airline}&transit=${transit}&searchClass=${classTicket}&sort[${sortBy}]=${sort}&page=${page}`
       );
-      dispatch({ type: 'GET_TICKET', payload: results.results });
+      console.log(results, 'test data')
+      dispatch({
+        type: 'GET_TICKET',
+        payload: {
+          ticket: results.results,
+          pageInfo: results.pageInfo
+        }
+      });
     } catch (err) {
-
-      // dispatch({type: 'SET_LOADING', payload: false});
+      console.log(err)
     }
   };
 };
@@ -99,5 +105,17 @@ export const payTicket = (id, token) => {
         dispatch({ type: 'TICKET_RESET' });
       }, 3000);
     }
+  }
+}
+
+export const getAirlines = () => async dispatch => {
+  try {
+    const { data } = await http().get(`${URL}/airlines/airlines`)
+    dispatch({
+      type: 'GET_AIRLINES',
+      payload: data.results
+    })
+  } catch (err) {
+    console.log(err)
   }
 }
