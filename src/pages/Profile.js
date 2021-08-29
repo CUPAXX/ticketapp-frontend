@@ -30,7 +30,7 @@ class Profile extends Component {
     })
   }
 
-  data = (e) => {
+  data = async (e) => {
     e.preventDefault()
     const { token } = this.props.auth
     const { fullname, email, phone_number, city, postcode, address, picture } = this.state.dataUser
@@ -44,26 +44,32 @@ class Profile extends Component {
       postcode
     }
     console.log(data)
-    this.props.updateProfile(data, token)
-    // if (this.props.user.errMsg === '') {
-    //   Swal.fire({
-    //     position: 'top-end',
-    //     icon: 'success',
-    //     title: 'Login Success',
-    //     showConfirmButton: false,
-    //     timer: 1500
-    //   })
-    //   this.props.history.push('/')
-    //   this.props.history.replace('/profile')
-    // } else {
-    //   Swal.fire({
-    //     position: 'top-end',
-    //     icon: 'error',
-    //     title: `${this.props.user.errMsg}`,
-    //     showConfirmButton: false,
-    //     timer: 1500
-    //   })
-    // }
+    await this.props.updateProfile(data, token).then(() => {
+      const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer)
+          toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+      })
+      if (this.props.user.errMsg === '') {
+        Toast.fire({
+          icon: 'success',
+          title: 'Update successfully'
+        })
+        this.props.history.push('/')
+        this.props.history.replace('/profile')
+      } else {
+        Toast.fire({
+          icon: 'error',
+          title: `${this.props.user.errMsg}`
+        })
+      }
+    })
   }
 
   onLogout= (e) => {
@@ -89,6 +95,34 @@ class Profile extends Component {
     })
   }
 
+  onPick = (e) => {
+    const max = 61440
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer)
+        toast.addEventListener('mouseleave', Swal.resumeTimer)
+      }
+    })
+    if (e.target.files[0].size <= max) {
+      this.setState(prevState => ({
+        dataUser: {
+          ...prevState.dataUser,
+          picture: e.target.files[0]
+        }
+      }))
+    } else {
+      Toast.fire({
+        icon: 'error',
+        title: 'File cannot exceed 60kb'
+      })
+    }
+  }
+
   render () {
     console.log(this.state)
     return (
@@ -102,12 +136,7 @@ class Profile extends Component {
               : (
               <Image className="rounded-circle" style={{ width: '130px', height: '130px' }} src={profilePic} />
                 )}
-            <input type="file" onChange={e => this.setState(prevState => ({
-              dataUser: {
-                ...prevState.dataUser,
-                picture: e.target.files[0]
-              }
-            }))} className="d-none" id="file-upload"/>
+            <input type="file" onChange={e => this.onPick(e)} className="d-none" id="file-upload"/>
               <label style={styleCoba.btnLeft} htmlFor="file-upload" >Select Photo</label>
             <h5 className="fw-bold py-2">{this.state.dataUser.fullname}</h5>
             {this.state.dataUser.address !== null && this.state.dataUser.address !== ''

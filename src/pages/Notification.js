@@ -1,9 +1,43 @@
 import React, { Component } from 'react'
-import { Image, Button, Form } from 'react-bootstrap'
 import ItemNotif from '../components/ItemNotif'
+import { connect } from 'react-redux';
+import { getNotif, delNotif } from '../redux/action/notification'
 
-export default class Notification extends Component {
+import Swal from 'sweetalert2'
+
+class Notification extends Component {
+  componentDidMount () {
+    const { token } = this.props.auth
+    this.props.getNotif(token)
+  }
+
+  onDel = (id) => {
+    Swal.fire({
+      title: 'Are you sure want delete?',
+      text: 'you will no able see this again!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, i want to delete!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const { token } = this.props.auth
+        this.props.delNotif(token, id).then(() => {
+          Swal.fire(
+            'Success!',
+            'Success delete this notification',
+            'success'
+          )
+          this.props.history.push('/')
+          this.props.history.replace('/notification')
+        })
+      }
+    })
+  }
+
   render () {
+    const { data } = this.props.notification
     return (
       <div style={{ backgroundColor: '#7ECFC0' }} className="py-4 d-flex justify-content-center">
         <div className="parentNotif bg-white d-flex flex-column gap-3">
@@ -13,13 +47,27 @@ export default class Notification extends Component {
             <p className="fw-bold" style={{ color: '#7ECFC0', fontSize: '13px' }}>Clear</p>
           </div>
 
-          <ItemNotif />
-          <ItemNotif />
-          <ItemNotif />
-          <ItemNotif />
+          {data.map(data => (
+            <ItemNotif
+            key={data.id}
+            label={data.label}
+            message={data.message}
+            onDel={() => this.onDel(data.id)}
+          />
+          ))}
 
         </div>
       </div>
     )
   }
 }
+
+const mapStateToProps = state => ({
+  auth: state.auth,
+  notification: state.notification
+})
+const mapDispatchToProps = {
+  getNotif, delNotif
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Notification)
