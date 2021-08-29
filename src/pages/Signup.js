@@ -1,12 +1,10 @@
-import React, { Component } from 'react'
-import {
-  Row, Col, Image, Form, Button
-} from 'react-bootstrap'
-import { LeftBg } from '../components/LeftBg'
-import icon from '../assets/icon.png'
+import React, { Component } from 'react';
+import { Row, Col, Image, Form, Button } from 'react-bootstrap';
+import { LeftBg } from '../components/LeftBg';
+import icon from '../assets/icon.png';
 import { connect } from 'react-redux';
-import Swal from 'sweetalert2'
-import { authRegister } from '../redux/action/auth'
+import Swal from 'sweetalert2';
+import { authRegister } from '../redux/action/auth';
 import { Link } from 'react-router-dom';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -16,10 +14,10 @@ class Signup extends Component {
     email: '',
     password: '',
     fullname: ''
-  }
+  };
 
   onRegister = async (values) => {
-    const { email, password, fullname } = values
+    const { email, password, fullname } = values;
     await this.props.authRegister(email, password, fullname).then(() => {
       const Toast = Swal.mixin({
         toast: true,
@@ -28,24 +26,24 @@ class Signup extends Component {
         timer: 3000,
         timerProgressBar: true,
         didOpen: (toast) => {
-          toast.addEventListener('mouseenter', Swal.stopTimer)
-          toast.addEventListener('mouseleave', Swal.resumeTimer)
+          toast.addEventListener('mouseenter', Swal.stopTimer);
+          toast.addEventListener('mouseleave', Swal.resumeTimer);
         }
-      })
+      });
       if (this.props.auth.errMsg === '') {
         Toast.fire({
           icon: 'success',
           title: 'Register successfully'
-        })
+        });
         this.props.history.push('/login');
       } else {
         Toast.fire({
           icon: 'error',
           title: `${this.props.auth.errMsg}`
-        })
+        });
       }
-    })
-  }
+    });
+  };
 
   render () {
     return (
@@ -61,107 +59,146 @@ class Signup extends Component {
                 <h1 style={styleCoba.textIcon}>Ticky</h1>
               </Col>
             </Row>
-            <h1 style={styleCoba.label} className="mt-5">Register</h1>
+            <h1 style={styleCoba.label} className="mt-5">
+              Register
+            </h1>
 
             <Formik
-            initialValues={{ email: '', password: '', fullname: '' }}
-            onSubmit={ values => {
-              this.onRegister(values)
-            }}
-            validationSchema={Yup.object().shape({
-              email: Yup.string()
-                .email()
-                .required('Email Required'),
-              password: Yup.string()
-                .required('Password Required')
-                .min(8, 'Password Length min 8 character'),
-              fullname: Yup.string()
-                .required('Fullname Required')
-            })}
-          >
-            {({
-              values,
-              touched,
-              errors,
-              isSubmitting,
-              handleChange,
-              handleBlur,
-              handleSubmit,
-              isValid
-              /* and other goodies */
-            }) => (
-                  <Form onSubmit={handleSubmit}>
-                    <Form.Group className="mb-3" controlId="fullname">
-                      <Form.Control onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.fullname} style={styleCoba.form} type="text" placeholder="Full Name" />
-                        {touched.fullname && errors.fullname
-                          ? (
-                            <div style={{ color: 'red', padding: '5px 0px' }}>{errors.fullname}</div>
-                            )
-                          : null}
-                    </Form.Group>
-
-                    <Form.Group className="mb-3" controlId="email">
-                      <Form.Control onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.email} style={styleCoba.form} type="email" placeholder="Enter email" />
-                        {touched.email && errors.email
-                          ? (
-                            <div style={{ color: 'red', padding: '5px 0px' }}>{errors.email}</div>
-                            )
-                          : null}
-                    </Form.Group>
-
-                    <Form.Group className="mb-3" controlId="password">
-                      <div className="position-relative d-flex justify-content-between align-items-center d-md-flex justify-content-md-between align-items-md-center">
-                        <Form.Control onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.password} style={styleCoba.form} type="password" placeholder="Password" />
-                        <Button style={styleCoba.iconBtn}><i className="fa fa-eye" style={styleCoba.iconPw} /></Button>
+              initialValues={{ email: '', password: '', fullname: '' }}
+              onSubmit={(values) => {
+                this.onRegister(values);
+              }}
+              validationSchema={Yup.object().shape({
+                email: Yup.string().email().required('Email Required'),
+                password: Yup.string()
+                  .required('Password Required')
+                  .min(8, 'Password Length min 8 character'),
+                fullname: Yup.string().required('Fullname Required')
+              })}
+            >
+              {({
+                values,
+                touched,
+                errors,
+                isSubmitting,
+                handleChange,
+                handleBlur,
+                handleSubmit,
+                isValid
+                /* and other goodies */
+              }) => (
+                <Form onSubmit={handleSubmit}>
+                  <Form.Group className="mb-3" controlId="fullname">
+                    <Form.Control
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.fullname}
+                      style={styleCoba.form}
+                      type="text"
+                      placeholder="Full Name"
+                    />
+                    {touched.fullname && errors.fullname
+                      ? (
+                      <div style={{ color: 'red', padding: '5px 0px' }}>
+                        {errors.fullname}
                       </div>
-                      {touched.password && errors.password
-                        ? (
-                            <div style={{ color: 'red', padding: '5px 0px' }}>{errors.password}</div>
-                          )
-                        : null}
-                    </Form.Group>
+                        )
+                      : null}
+                  </Form.Group>
 
-                    <div style={styleCoba.btnParen}>
-                      <Button style={styleCoba.btnSubmit} variant="primary" type="submit" disabled={!isValid}>Sign Up</Button>
+                  <Form.Group className="mb-3" controlId="email">
+                    <Form.Control
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.email}
+                      style={styleCoba.form}
+                      type="email"
+                      placeholder="Enter email"
+                    />
+                    {touched.email && errors.email
+                      ? (
+                      <div style={{ color: 'red', padding: '5px 0px' }}>
+                        {errors.email}
+                      </div>
+                        )
+                      : null}
+                  </Form.Group>
+
+                  <Form.Group className="mb-3" controlId="password">
+                    <div className="position-relative d-flex justify-content-between align-items-center d-md-flex justify-content-md-between align-items-md-center">
+                      <Form.Control
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.password}
+                        style={styleCoba.form}
+                        type="password"
+                        placeholder="Password"
+                      />
+                      <Button style={styleCoba.iconBtn}>
+                        <i className="fa fa-eye" style={styleCoba.iconPw} />
+                      </Button>
                     </div>
+                    {touched.password && errors.password
+                      ? (
+                      <div style={{ color: 'red', padding: '5px 0px' }}>
+                        {errors.password}
+                      </div>
+                        )
+                      : null}
+                  </Form.Group>
 
-                    <Form.Group className="mb-3 " style={styleCoba.line} controlId="checkbox">
-                      <Form.Check type="checkbox" label="Accept terms and condition" />
-                    </Form.Group>
+                  <div style={styleCoba.btnParen}>
+                    <Button
+                      style={styleCoba.btnSubmit}
+                      variant="primary"
+                      type="submit"
+                      disabled={!isValid}
+                    >
+                      Sign Up
+                    </Button>
+                  </div>
 
-                    <h3 style={styleCoba.textBtm}>Already have an account?</h3>
+                  <Form.Group
+                    className="mb-3 "
+                    style={styleCoba.line}
+                    controlId="checkbox"
+                  >
+                    <Form.Check
+                      type="checkbox"
+                      label="Accept terms and condition"
+                    />
+                  </Form.Group>
 
-                  </Form>
-            )}
+                  <h3 style={styleCoba.textBtm}>Already have an account?</h3>
+                </Form>
+              )}
             </Formik>
 
             <div style={styleCoba.btnParen}>
-              <Link to="/login" style={styleCoba.btnSignIn} variant="primary" type="button">Sign In</Link>
+              <Link
+                to="/login"
+                style={styleCoba.btnSignIn}
+                variant="primary"
+                type="button"
+              >
+                Sign In
+              </Link>
             </div>
           </div>
-
         </Col>
       </Row>
-
-    )
+    );
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   auth: state.auth
-})
-const mapDispatchToProps = { authRegister }
+});
+const mapDispatchToProps = { authRegister };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Signup)
+export default connect(mapStateToProps, mapDispatchToProps)(Signup);
 
 const styleCoba = {
-
   icon: {
     width: '50px',
     marginRight: '10px'
@@ -235,4 +272,4 @@ const styleCoba = {
     textAlign: 'center',
     textDecoration: 'none'
   }
-}
+};

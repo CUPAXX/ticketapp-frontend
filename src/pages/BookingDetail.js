@@ -124,4 +124,4 @@ const mapDispatchToProps = {
   getDetailTicket
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(BookingDetail))
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(BookingDetail))

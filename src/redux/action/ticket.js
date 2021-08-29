@@ -4,8 +4,12 @@ const { REACT_APP_BACKEND_URL: URL } = process.env
 
 export const getTickets = (departure, destination, airline, transit, classTicket, sortBy, sort, page) => {
   return async dispatch => {
+    dispatch({ type: 'SET_LOADING', payload: true });
     try {
-      // dispatch({ type: 'GET_TICKET', payload: [] });
+
+      dispatch({ type: 'SET_LOADING', payload: false });
+      dispatch({ type: 'GET_TICKET', payload: [] });
+
       const { data: results } = await http().get(
         `${URL}/tickets/tickets?departure=${departure}&destination=${destination}&airline=${airline}&transit=${transit}&searchClass=${classTicket}&sort[${sortBy}]=${sort}&page=${page}`
       );
@@ -18,7 +22,11 @@ export const getTickets = (departure, destination, airline, transit, classTicket
         }
       });
     } catch (err) {
+
+      dispatch({ type: 'SET_LOADING', payload: false });
+
       console.log(err)
+
     }
   };
 };
@@ -27,7 +35,9 @@ export const addToBooking = (token, setData) => async (dispatch) => {
   const form = new URLSearchParams();
   form.append('total_amount', setData.total_amount);
   form.append('id_ticket', setData.id_ticket)
+  dispatch({ type: 'SET_LOADING', payload: true });
   try {
+    dispatch({ type: 'SET_LOADING', payload: false });
     const { data } = await http(token).post(`${URL}/transactions/create-transaction`, form);
     dispatch({
       type: 'PROCEED_TO_PAYMENT',
@@ -35,12 +45,15 @@ export const addToBooking = (token, setData) => async (dispatch) => {
     });
   } catch (err) {
     console.log(err);
+    dispatch({ type: 'SET_LOADING', payload: false });
   }
 };
 
 export const getTicket = (token) => {
   return async (dispatch) => {
+    dispatch({ type: 'SET_LOADING', payload: true });
     try {
+      dispatch({ type: 'SET_LOADING', payload: false });
       const { data } = await http(token).get(`${URL}/transactions/transaction`)
       dispatch({
         type: 'GET_BOOKING',
@@ -50,6 +63,7 @@ export const getTicket = (token) => {
         dispatch({ type: 'TICKET_RESET' });
       }, 3000);
     } catch (err) {
+      dispatch({ type: 'SET_LOADING', payload: false });
       dispatch({
         type: 'GET_TICKET_FAILED',
         payload: err.response.data.message
@@ -64,7 +78,9 @@ export const getTicket = (token) => {
 export const getDetailTicket = (id, token) => {
   console.log(id, token)
   return async (dispatch) => {
+    dispatch({ type: 'SET_LOADING', payload: true });
     try {
+      dispatch({ type: 'SET_LOADING', payload: false });
       const { data } = await http(token).get(`${URL}/transactions/transaction/${id}`)
       dispatch({
         type: 'GET_DETAIL_TICKET',
@@ -74,6 +90,7 @@ export const getDetailTicket = (id, token) => {
         dispatch({ type: 'TICKET_RESET' });
       }, 3000);
     } catch (err) {
+      dispatch({ type: 'SET_LOADING', payload: false });
       dispatch({
         type: 'GET_DETAIL_TICKET_FAILED',
         payload: err.response.data.message
@@ -87,7 +104,9 @@ export const getDetailTicket = (id, token) => {
 
 export const payTicket = (id, token) => {
   return async (dispatch) => {
+    dispatch({ type: 'SET_LOADING', payload: true });
     try {
+      dispatch({ type: 'SET_LOADING', payload: false });
       const { data } = await http(token).put(`${URL}/transactions/proceed-to-payment/${id}`)
       dispatch({
         type: 'PAY_TICKET',
@@ -97,6 +116,7 @@ export const payTicket = (id, token) => {
         dispatch({ type: 'TICKET_RESET' });
       }, 3000);
     } catch (err) {
+      dispatch({ type: 'SET_LOADING', payload: false });
       dispatch({
         type: 'PAY_TICKET_FAILED',
         payload: err.response.data.message

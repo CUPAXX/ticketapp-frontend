@@ -3,6 +3,7 @@ import auth from './auth'
 import user from './user'
 import chat from './chat'
 import ticket from './ticket'
+import globalReducer from './globalReducer'
 import notification from './notification'
 
 import { persistReducer } from 'redux-persist'
@@ -18,6 +19,7 @@ const reducer = combineReducers({
   user,
   chat,
   ticket,
+  globalReducer,
   notification
 })
 

@@ -9,6 +9,7 @@ import { io } from 'socket.io-client';
 import { getUser } from '../redux/action/user'
 import { useParams, withRouter } from 'react-router-dom';
 import Swal from 'sweetalert2'
+import imgUser from '../assets/user.png'
 
 const { REACT_APP_BACKEND_URL: URL } = process.env
 
