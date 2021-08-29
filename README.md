@@ -59,4 +59,4 @@ REACT_APP_BACKEND_URL=http://localhost:8080 //[Backend API]
 
 ## License
 
-© [M Fiqry Arahmansyah](https://github.com/CUPAXX) © [Rahardian Reza Rizaldy](https://github.com/apaajaa22) © [Fajar Rizky Maulana](https://github.com/acrossmindanduniverse © [Sandi Muhamad Rizarul](https://github.com/PurpleReborn)
+© [M Fiqry Arahmansyah](https://github.com/CUPAXX) © [Rahardian Reza Rizaldy](https://github.com/apaajaa22) © [Fajar Rizky Maulana](https://github.com/acrossmindanduniverse) © [Sandi Muhamad Rizarul](https://github.com/PurpleReborn)
