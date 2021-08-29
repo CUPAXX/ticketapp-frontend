@@ -1,7 +1,9 @@
 const initialState = {
   data: [],
+  pageInfo: {},
   dataTicket: [],
   dataDetailTicket: {},
+  airlines: [],
   errMsg: '',
   succMsg: ''
 }
@@ -11,7 +13,8 @@ const ticket = (state = initialState, action) => {
     case 'GET_TICKET': {
       return {
         ...state,
-        data: action.payload,
+        data: action.payload.ticket,
+        pageInfo: action.payload.pageInfo,
         errMsg: ''
       }
     }
@@ -60,6 +63,12 @@ const ticket = (state = initialState, action) => {
     case 'PROCEED_TO_PAYMENT': {
       return {
         ...state
+      }
+    }
+    case 'GET_AIRLINES': {
+      return {
+        ...state,
+        airlines: action.payload
       }
     }
     default: {

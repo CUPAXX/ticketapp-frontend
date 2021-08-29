@@ -16,10 +16,41 @@ import ItemSearch from '../components/ItemSearch';
 import { useDispatch, useSelector } from 'react-redux';
 import { FaHamburger, FaLuggageCart, FaPlaneDeparture } from 'react-icons/fa';
 import { Wifi } from '@material-ui/icons';
-import { getTickets } from '../redux/action/ticket'
+import { getAirlines, getTickets } from '../redux/action/ticket'
+import qs from 'query-string';
+import { useLocation, useHistory } from 'react-router-dom';
+
 function Search () {
   const { data } = useSelector((state) => state.ticket);
+  const { airlines } = useSelector(state => state.ticket)
+  const { pageInfo } = useSelector(state => state.ticket)
+  const history = useHistory()
+  const location = useLocation()
+  const urlParams = qs.parse(location)
   const dispatch = useDispatch()
+
+  const [page, setPage] = useState([])
+
+  const [searchData, setSearchData] = useState({
+    departure: urlParams.departure ? urlParams.departure : '',
+    destination: urlParams.destination ? urlParams.destination : '',
+    airline: urlParams.airline ? urlParams.airline : '',
+    transit: urlParams.transit ? urlParams.transit : '',
+    classTicket: urlParams.classTicket ? urlParams.classTicket : '',
+    searchClass: urlParams.searchClass ? urlParams.searchClass : '',
+    sortBy: urlParams.sortBy ? urlParams.sortBy : 'price',
+    sort: urlParams.sort ? urlParams.sort : '1',
+    page: urlParams.page ? urlParams.page : '1'
+  });
+
+  const transitLocal = [
+    'Direct', 'Transit', 'Transit 2'
+  ]
+
+  let searchParams =
+  `?destination=${searchData.destination}&transit
+  =${searchData.transit}&airline=${searchData.airline}`
+
   const Icon = ({ label }) => {
     switch (label) {
       case 'Luggage':
@@ -33,17 +64,33 @@ function Search () {
     }
   };
 
-  const [departure, setDeparture] = useState('Bandung')
-  const [destination, setDestination] = useState('Jakarta')
-
   const onSearch = () => {
-    const form = {
-      departure: departure,
-      destination: destination,
-      classTicket: ''
-    }
-    dispatch(getTickets(form))
+    dispatch(getTickets(searchData.departure, searchData.destination, searchData.airline, searchData.transit, searchData.classTicket, searchData.sortBy, searchData.sort, searchData.page))
   }
+
+  useEffect(() => {
+    if (searchData.destination !== '') {
+      searchParams += `&page=${searchData.page}`
+      history.push(`/search/${searchParams}`);
+    } else {
+      history.push(`/search/?page=${searchData.page}`);
+    }
+    onSearch()
+  }, [searchData]);
+
+  useEffect(() => {
+    dispatch(getAirlines());
+  }, []);
+
+  useEffect(() => {
+    const arrPage = [];
+    for (let i = 1; i <= pageInfo.totalPage; i++) {
+      arrPage.push(i)
+    }
+    setPage(arrPage)
+  }, [pageInfo])
+
+  console.log(page, 'ticket data')
 
   return (
     <div style={styleCoba.warpAll}>
@@ -58,7 +105,10 @@ function Search () {
               </div>
               <div className="d-flex flex-row justify-content-between align-items-center gap-5">
                 {/* <h5>Medan (IDN)</h5> */}
-                <select value={departure} onChange={(e) => setDeparture(e.target.value)}
+                <select value={searchData.departure} onChange={(e) => setSearchData({
+                  ...searchData,
+                  departure: e.target.value
+                })}
                 style={styleCoba.wrapperSelect}>
                   <option selected value="Bandung">Bandung</option>
                   <option value="Jakarta">Jakarta</option>
@@ -73,7 +123,10 @@ function Search () {
                 </select>
                 <BsArrowLeftRight />
                 {/* <h5>Tokyo (JPN)</h5> */}
-                <select value={destination} onChange={(e) => setDestination(e.target.value)}
+                <select value={searchData.destination} onChange={(e) => setSearchData({
+                  ...searchData,
+                  destination: e.target.value
+                })}
                 style={styleCoba.wrapperSelect}>
                   <option value="Bandung">Bandung</option>
                   <option selected value="Jakarta">Jakarta</option>
@@ -116,18 +169,20 @@ function Search () {
                     <span className="fw-bold">Transit</span>
                   </Accordion.Header>
                   <Accordion.Body>
-                    <div className="d-flex flex-row justify-content-between">
-                      <p>Direct</p>
-                      <Form.Check />
-                    </div>
-                    <div className="d-flex flex-row justify-content-between">
-                      <p>Transit</p>
-                      <Form.Check />
-                    </div>
-                    <div className="d-flex flex-row justify-content-between">
-                      <p>Transit 2+</p>
-                      <Form.Check />
-                    </div>
+                    {transitLocal.map((e, idx) => (
+                      <div key={idx} className="d-flex flex-row justify-content-between">
+                          <p>{e}</p>
+                        <Form.Check value={e} onClick={(event) => {
+                          setSearchData({
+                            ...searchData,
+                            transit: event.target.value
+                          });
+                          if (e.target?.checked) {
+                            onSearch();
+                          }
+                        }} />
+                      </div>
+                    ))}
                   </Accordion.Body>
                 </Accordion.Item>
                 <Accordion.Item eventKey="1">
@@ -200,18 +255,20 @@ function Search () {
                     <span className="fw-bold">Airlines</span>
                   </Accordion.Header>
                   <Accordion.Body>
-                    <div className="d-flex flex-row justify-content-between">
-                      <p>Garuda Indonesia</p>
-                      <Form.Check />
-                    </div>
-                    <div className="d-flex flex-row justify-content-between">
-                      <p>Air Asia</p>
-                      <Form.Check />
-                    </div>
-                    <div className="d-flex flex-row justify-content-between">
-                      <p>Lion Air</p>
-                      <Form.Check />
-                    </div>
+                      {airlines.map((e, idx) => (
+                        <div key={idx} className="d-flex flex-row justify-content-between">
+                            <p>{e.name}</p>
+                          <Form.Check onClick={() => {
+                            setSearchData({
+                              ...searchData,
+                              airline: e.id
+                            });
+                            if (e.target?.checked) {
+                              onSearch();
+                            }
+                          }} />
+                        </div>
+                      ))}
                   </Accordion.Body>
                 </Accordion.Item>
                 <Accordion.Item eventKey="5">
@@ -223,7 +280,22 @@ function Search () {
                       <p>Lowest</p>
                       <p>Higest</p>
                     </div>
-                    <Form.Range />
+                    <Form.Range onMouseDownCapture={(e) => {
+                      if (e.clientX < 200) {
+                        setSearchData({
+                          ...searchData,
+                          sort: '0'
+                        })
+                      } else {
+                        setSearchData({
+                          ...searchData,
+                          sort: '1'
+                        })
+                      }
+                      console.log(e, 'mouse action')
+                      onSearch()
+                      // dispatch(getTickets(searchData.departure, searchData.destination, searchData.classTicket, searchData.sortBy, searchData.sort))
+                    }} />
                     <div className="d-flex flex-row justify-content-between">
                       <p>$300</p>
                       <p>$1000</p>
@@ -257,6 +329,19 @@ function Search () {
               />
             );
           })}
+            <div style={styleCoba.paginationContainer}>
+              {page.map((e, idx) => (
+                <div style={e === searchData.page ? styleCoba.pageBtnContainer2 : styleCoba.pageBtnContainer} key={idx}>
+                    <Button onClick={() => {
+                      setSearchData({
+                        ...searchData,
+                        page: e
+                      })
+                      onSearch()
+                    }} style={styleCoba.pageBtn}>{e}</Button>
+                </div>
+              ))}
+            </div>
         </div>
       </div>
     </div>
@@ -268,6 +353,34 @@ export default Search;
 const styleCoba = {
   warpAll: {
     backgroundColor: '#F5F6FA'
+  },
+  paginationContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'center'
+  },
+  pageBtnContainer: {
+    backgroundColor: '#7ECFC0',
+    borderRadius: '15px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: '5px',
+    margin: '17px'
+  },
+  pageBtnContainer2: {
+    backgroundColor: '#4af7a4',
+    borderRadius: '15px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: '5px',
+    margin: '17px'
+  },
+  pageBtn: {
+    backgroundColor: 'transparent',
+    border: '0px'
   },
   componentLeft: {
     backgroundColor: 'white',

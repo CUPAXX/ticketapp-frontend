@@ -8,36 +8,73 @@ import headerImg from '../assets/headerImg.png'
 import { getUser } from '../redux/action/user'
 import imgUser from '../assets/user.png'
 
+import qs from 'query-string';
 import { useLocation, Link, useHistory } from 'react-router-dom'
 import { getTickets } from '../redux/action/ticket'
 
 const { REACT_APP_BACKEND_URL: URL } = process.env
 
 function Header (props) {
-  const [search, setSearch] = useState('')
   const location = useLocation();
+  const urlParams = qs.parse(location)
   const history = useHistory()
-  console.log(location.pathname);
+
+  const [searchData, setSearchData] = useState({
+    departure: urlParams.departure ? urlParams.departure : '',
+    destination: urlParams.destination ? urlParams.destination : '',
+    airline: urlParams.airline ? urlParams.airline : '',
+    transit: urlParams.transit ? urlParams.transit : '',
+    classTicket: urlParams.classTicket ? urlParams.classTicket : '',
+    searchClass: urlParams.searchClass ? urlParams.searchClass : '',
+    sortBy: urlParams.sortBy ? urlParams.sortBy : 'price',
+    sort: urlParams.sort ? urlParams.sort : '1',
+    page: urlParams.page ? urlParams.page : '1'
+  });
+
+  const searchParams =
+  `?destination=${searchData.destination}&transit
+  =${searchData.transit}&airline=${searchData.airline}`
 
   const { dataUser } = useSelector(state => state.user);
 
   const { token } = useSelector(state => state.auth);
   const dispatch = useDispatch();
 
+  const newData = {
+    airline: '',
+    transit: ''
+  };
+
   useEffect(() => {
     dispatch(getUser(token));
   }, [token]);
 
+  const handleGetDataFromChildren = (val1, val2) => {
+    setSearchData({
+      ...searchData,
+      airline: val1,
+      transit: val2
+    })
+  }
+
   const onSearch = (e) => {
     e.preventDefault()
-    const form = {
-      departure: '',
-      destination: search,
-      classTicket: ''
+    if (e.key === 'Enter') {
+      setSearchData({
+        ...searchData,
+        destination: e.target.value
+      });
     }
-    dispatch(getTickets(form))
-    history.push('/search')
+    dispatch(getTickets(searchData.departure, searchData.destination, searchData.airline, searchData.transit, searchData.classTicket, searchData.sortBy, searchData.sort, searchData.page))
+    history.push(`/search/${searchParams}`, newData);
   }
+
+  useEffect(() => {
+    if (searchData.destination === '') {
+      dispatch(getTickets(searchData.departure, searchData.destination, searchData.airline, searchData.transit, searchData.classTicket, searchData.sortBy, searchData.sort, searchData.page));
+      history.push('/search', newData);
+    }
+  }, []);
 
   return (
     <React.Fragment>
@@ -57,8 +94,11 @@ function Header (props) {
                 className="mr-2"
                 aria-label="Search"
                 style={styleCoba.searchInput}
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                // value={searchData.destination}
+                onChange={(e) => setSearchData({
+                  ...searchData,
+                  destination: e.target.value
+                })}
               />
           </Form>
           <Nav className="me-auto ">
